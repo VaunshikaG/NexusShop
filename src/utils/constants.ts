@@ -1,0 +1,18 @@
+export const Constants = {
+    fontRegular: 'Nunito-Regular',
+    fontThin: 'Nunito-ExtraLight',
+    fontBold: 'Nunito-SemiBold',
+    fontMedium: 'Nunito-Medium',
+    appName: "The Nexus Shop",
+    login: "Login",
+    signup: "Sign Up",
+    userName: "Username",
+    email: "Email",
+    password: "Password",
+    confirmPassword: "Confirm Password",
+    forgotPassword: "Forgot Password",
+    resetPassword: "Reset Password",
+    resetPasswordSuccess: "Password Reset Successfully",
+    signUpAccLabel: `Already have an account?${'  '}`,
+    loginAccLabel: `Don't have an account?${'  '}`
+}

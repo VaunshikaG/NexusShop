@@ -17,8 +17,6 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 
 function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
   return (
     <Provider store={store}>
       <NavigationContainer>

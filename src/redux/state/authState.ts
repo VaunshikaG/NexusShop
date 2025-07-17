@@ -1,6 +1,6 @@
 // import { LoginResponseData } from "../../types/auth/loginModels";
 // import { SignupResponseData } from "../../types/auth/signupModels";
-import { UserInfo } from "../../types/auth/userModel";
+import { UserInfo } from "../../models/userModel";
 
 export interface AuthState {
     isLoggedIn: boolean;

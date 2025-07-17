@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AppUrls } from "../../utils/urls";
-import { loginApi, signupApi } from "../../services/services";
-import { LoginReqModel } from "../../types/auth/loginModels";
-import { SignupReqModel } from "../../types/auth/signupModels";
-import { AuthState } from "../state/authState";
+import { AppUrls } from "../../../utils/urls";
+import { loginApi, signupApi } from "../../../services/services";
+import { LoginReqModel } from "../../../models/auth/loginModels";
+import { SignupReqModel } from "../../../models/auth/signupModels";
+import { AuthState } from "../../state/authState";
 import { signupUser, loginUser } from "./authTrunks";
 
 const initialState: AuthState = {
@@ -43,7 +43,7 @@ export const authSlice = createSlice({
                 state.apiSuccess = true;
                 state.isLoggedIn = true;
                 state.apiMessage = action.payload.message;
-                state.userInfo = action.payload;
+                // state.userInfo = action.payload;
             })
             .addCase(signupUser.rejected, (state, action) => {
                 state.isLoading = false;
@@ -65,7 +65,7 @@ export const authSlice = createSlice({
                 state.apiSuccess = true;
                 state.isLoggedIn = true;
                 state.apiMessage = action.payload.message;
-                state.userInfo = action.payload;
+                // state.userInfo = action.payload;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false;

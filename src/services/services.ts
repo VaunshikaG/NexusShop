@@ -1,7 +1,7 @@
 import Snackbar from "react-native-snackbar";
 import { ApiResponse } from "../types/apiResponse";
-import { LoginReqModel, LoginResponseData } from "../types/auth/loginModels";
-import { SignupReqModel, SignupResponseData } from "../types/auth/signupModels";
+import { LoginReqModel, LoginResponseData } from "../models/auth/loginModels";
+import { SignupReqModel, SignupResponseData } from "../models/auth/signupModels";
 import { Constants } from "../utils/constants";
 import { AppUrls } from "../utils/urls";
 

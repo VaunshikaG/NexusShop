@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import Snackbar from 'react-native-snackbar'
 import Loading from '../../components/Loading'
-import { LoginReqModel } from '../../types/auth/loginModels'
-import { resetAll } from '../../redux/features/authSlice'
-import { loginUser } from '../../redux/features/authTrunks'
+import { LoginReqModel } from '../../models/auth/loginModels'
+import { resetAll } from '../../redux/features/auth/authSlice'
+import { loginUser } from '../../redux/features/auth/authTrunks'
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 

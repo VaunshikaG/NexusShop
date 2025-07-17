@@ -27,7 +27,7 @@ const Signup = ({ navigation }: SignupProps) => {
 
   useEffect(() => {
     if (apiSuccess) {
-      navigation.replace('Home')
+      navigation.replace('Login')
       Snackbar.show({
         text: Constants.signupSuccess,
         duration: Snackbar.LENGTH_SHORT,

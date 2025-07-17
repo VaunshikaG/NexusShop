@@ -21,7 +21,7 @@ const Login = ({ navigation }: LoginProps) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const dispatch: AppDispatch = useDispatch()
-    const { isLoggedIn, isLoading, apiError, apiSuccess, userInfo } = useSelector((state: RootState) => state.authentication);
+    const { isLoggedIn, isLoading, apiError, apiSuccess } = useSelector((state: RootState) => state.authentication);
 
     useEffect(() => {
         if (isLoggedIn && apiSuccess) {

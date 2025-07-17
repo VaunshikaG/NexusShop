@@ -1,18 +1,14 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { AppUrls } from "../../../utils/urls";
-import { loginApi, signupApi } from "../../../services/services";
-import { LoginReqModel } from "../../../models/auth/loginModels";
-import { SignupReqModel } from "../../../models/auth/signupModels";
+import { createSlice } from "@reduxjs/toolkit";
 import { AuthState } from "../../state/authState";
 import { signupUser, loginUser } from "./authTrunks";
+import { Constants } from "../../../utils/constants";
 
 const initialState: AuthState = {
     isLoggedIn: false,
     isLoading: false,
     apiSuccess: false,
     apiError: null,
-    userInfo: null,
-    apiMessage: null,
+    token: null,
 };
 
 export const authSlice = createSlice({
@@ -24,8 +20,7 @@ export const authSlice = createSlice({
             state.apiSuccess = false;
             state.isLoading = false;
             state.apiError = null;
-            state.userInfo = null;
-            state.apiMessage = null;
+            state.token = null;
         },
         resetAll: state => initialState,
     },
@@ -33,46 +28,44 @@ export const authSlice = createSlice({
         builder
             .addCase(signupUser.pending, (state) => {
                 state.isLoading = true;
-                state.apiError = null;
                 state.apiSuccess = false;
                 state.isLoggedIn = false;
-                state.apiMessage = null;
+                state.apiError = null;
+                state.token = null;
             })
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.apiSuccess = true;
                 state.isLoggedIn = true;
-                state.apiMessage = action.payload.message;
-                // state.userInfo = action.payload;
             })
             .addCase(signupUser.rejected, (state, action) => {
                 state.isLoading = false;
-                state.apiError = action.payload as string;
                 state.apiSuccess = false;
                 state.isLoggedIn = false;
-                state.apiMessage = action.payload as string;
+                state.token = null;
+                state.apiError = (action.payload as string) || action.error.message || Constants.error;
                 console.error('Registration failed:', action.payload);
             })
             .addCase(loginUser.pending, (state) => {
                 state.isLoading = true;
-                state.apiError = null;
                 state.apiSuccess = false;
                 state.isLoggedIn = false;
-                state.apiMessage = null;
+                state.apiError = null;
+                state.token = null;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.apiSuccess = true;
                 state.isLoggedIn = true;
-                state.apiMessage = action.payload.message;
-                // state.userInfo = action.payload;
+                state.apiError = null;
+                state.token = action.payload.data.data.accessToken;
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false;
-                state.apiError = action.payload as string;
                 state.apiSuccess = false;
                 state.isLoggedIn = false;
-                state.apiMessage = action.payload as string;
+                state.token = null;
+                state.apiError = (action.payload as string) || action.error.message || Constants.error;
                 console.error('login failed:', action.payload);
             })
     },

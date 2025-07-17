@@ -9,11 +9,11 @@ import { RootState } from '../redux/store'
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home = ({ navigation }: HomeProps) => {
-    const { isLoggedIn, isLoading, userInfo } = useSelector((state: RootState) => state.authentication);
+    const { data, isLoading,  } = useSelector((state: RootState) => state.userInfo);
 
     let userData = null;
-    if (isLoggedIn && userInfo) {
-        console.log("userInfo : ", userInfo);
+    if (data) {
+        console.log("userInfo : ", data);
     }
 
     // useEffect(() => {
@@ -26,7 +26,7 @@ const Home = ({ navigation }: HomeProps) => {
     return (
         <View style={styles.container}>
             <Text>Home</Text>
-            <Text>{userInfo?.username}</Text>
+            <Text>{data?.username}</Text>
             {/* {isLoading ? <Loading /> : <Text>Logged in as {user?.username}</Text>} */}
         </View>
     )

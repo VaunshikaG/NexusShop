@@ -4,11 +4,8 @@ import { LoginReqModel, LoginResponseData } from "../../../models/auth/loginMode
 import { SignupReqModel } from "../../../models/auth/signupModels";
 import { AppUrls } from "../../../utils/urls";
 import { ApiResponse } from "../../../types/apiResponse";
-import { AppDispatch } from "../../store";
-import { useDispatch } from "react-redux";
-import { setUserInfo } from "../userSlice";
-
-const dispatch: AppDispatch = useDispatch()
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Constants } from "../../../utils/constants";
 
 export const loginUser = createAsyncThunk(
     AppUrls.loginUrl,
@@ -21,8 +18,12 @@ export const loginUser = createAsyncThunk(
             if (parsedData.success === false) {
                 return rejectWithValue(parsedData.message || 'Login failed from API response');
             }
-            dispatch(setUserInfo(parsedData.data.data));
+
+            const token = parsedData.data.data.accessToken;
+            await AsyncStorage.setItem(Constants.token, token);
+            await AsyncStorage.setItem(Constants.isLoggedIn, 'true');
             return parsedData;
+
         } catch (error: any) {
             return rejectWithValue(error.message || 'Network error during login');
         }

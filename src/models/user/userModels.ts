@@ -1,14 +1,13 @@
-export interface SignupResponseData {
+export interface UserResponseData {
     statusCode: number;
-    data: SignupData;
+    data: UserData;
     message: string;
     success: boolean;
 }
-export interface SignupData {
-    user: User;
-}
-export interface User {
+
+export interface UserData {
     _id: string;
+    avatar: Avatar;
     username: string;
     email: string;
     role: string;
@@ -17,7 +16,6 @@ export interface User {
     createdAt: Date;
     updatedAt: Date;
     __v: number;
-    avatar: Avatar;
 }
 
 export interface Avatar {
@@ -25,9 +23,3 @@ export interface Avatar {
     localPath: string;
     _id: string;
 }
-
-export interface SignupReqModel {
-    username: string;
-    email: string;
-    password: string;
-};

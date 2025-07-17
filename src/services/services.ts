@@ -4,6 +4,7 @@ import { LoginReqModel, LoginResponseData } from "../models/auth/loginModels";
 import { SignupReqModel, SignupResponseData } from "../models/auth/signupModels";
 import { Constants } from "../utils/constants";
 import { AppUrls } from "../utils/urls";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // export const loginApi = async (reqModel: LoginReqModel): Promise<LoginResponseData> => {
 export const loginApi = async (reqModel: LoginReqModel): Promise<string> => {
@@ -56,6 +57,32 @@ export const signupApi = async (reqModel: SignupReqModel): Promise<SignupRespons
             })
         }
         return data.data;
+
+    } catch (error: any) {
+        console.error('Register API Error:', error);
+        throw new Error(error.message || Constants.networkError);
+    }
+};
+
+export const fetchUserApi = async (): Promise<string> => {
+    const url = AppUrls.appUrl + AppUrls.signupUrl;
+
+    const token = await AsyncStorage.getItem(Constants.token);
+    if (!token) throw new Error('No auth token found');
+
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            'Authorization': token,
+        },
+    };
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.text();
+        return data;
 
     } catch (error: any) {
         console.error('Register API Error:', error);

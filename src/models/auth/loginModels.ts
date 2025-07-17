@@ -1,11 +1,11 @@
 export interface LoginResponseData {
   statusCode: number;
-  data: Data;
+  data: LoginData;
   message: string;
   success: boolean;
 }
 
-export interface Data {
+export interface LoginData {
   user: User;
   accessToken: string;
   refreshToken: string;

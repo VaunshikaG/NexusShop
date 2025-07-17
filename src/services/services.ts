@@ -5,7 +5,8 @@ import { SignupReqModel, SignupResponseData } from "../types/auth/signupModels";
 import { Constants } from "../utils/constants";
 import { AppUrls } from "../utils/urls";
 
-export const loginApi = async (reqModel: LoginReqModel): Promise<LoginResponseData> => {
+// export const loginApi = async (reqModel: LoginReqModel): Promise<LoginResponseData> => {
+export const loginApi = async (reqModel: LoginReqModel): Promise<string> => {
     const url = AppUrls.appUrl + AppUrls.loginUrl;
 
     const options = {
@@ -19,15 +20,11 @@ export const loginApi = async (reqModel: LoginReqModel): Promise<LoginResponseDa
 
     try {
         const response = await fetch(url, options);
-        const data: ApiResponse<LoginResponseData> = await response.json();
+        // const data: ApiResponse<LoginResponseData> = await response.json();
+        const data = await response.text();
 
-        if (!response.ok || data.success === false) {
-            Snackbar.show({
-                text: data.message || Constants.loginFail,
-                duration: Snackbar.LENGTH_SHORT,
-            })
-        }
-        return data.data;
+        // return data.data;
+        return data;
 
     } catch (error: any) {
         console.error('Login API Error:', error);

@@ -11,13 +11,13 @@ export interface User {
     _id: string;
     username: string;
     email: string;
-    // role: string;
-    // loginType: string;
-    // isEmailVerified: boolean;
-    // createdAt: Date;
-    // updatedAt: Date;
-    // __v: number;
-    // avatar: Avatar;
+    role: string;
+    loginType: string;
+    isEmailVerified: boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    __v: number;
+    avatar: Avatar;
 }
 
 export interface Avatar {

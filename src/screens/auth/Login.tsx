@@ -7,9 +7,10 @@ import { Constants } from '../../utils/constants'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../redux/store'
 import Snackbar from 'react-native-snackbar'
-import { login, loginUser, resetSignup } from '../../redux/slice/authSlice'
 import Loading from '../../components/Loading'
 import { LoginReqModel } from '../../types/auth/loginModels'
+import { resetAll } from '../../redux/features/authSlice'
+import { loginUser } from '../../redux/features/authTrunks'
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
@@ -20,12 +21,12 @@ const Login = ({ navigation }: LoginProps) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const dispatch: AppDispatch = useDispatch()
-    const { isLoggedIn, isLoading, apiError, apiSuccess, loginInfo } = useSelector((state: RootState) => state.authentication);
+    const { isLoggedIn, isLoading, apiError, apiSuccess, userInfo } = useSelector((state: RootState) => state.authentication);
 
     useEffect(() => {
         if (isLoggedIn && apiSuccess) {
             Snackbar.show({
-                text: loginInfo?.message || Constants.loginSuccess,
+                text: Constants.loginSuccess,
                 duration: Snackbar.LENGTH_SHORT,
             })
             navigation.replace('Home')
@@ -34,7 +35,7 @@ const Login = ({ navigation }: LoginProps) => {
             setError('')
         } else if (apiError) {
             setError(apiError)
-            dispatch(resetSignup())
+            dispatch(resetAll())
         }
     }), [isLoggedIn, apiError]
 

@@ -7,9 +7,10 @@ import { Constants } from '../../utils/constants'
 import Loading from '../../components/Loading'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState, AppDispatch } from '../../redux/store'
-import { resetSignup, signupUser } from '../../redux/slice/authSlice'
+import { resetAll } from '../../redux/features/authSlice'
 import { SignupReqModel } from '../../types/auth/signupModels'
 import Snackbar from 'react-native-snackbar'
+import { signupUser } from '../../redux/features/authTrunks'
 
 type SignupProps = NativeStackScreenProps<RootStackParamList, 'Signup'>
 
@@ -42,7 +43,7 @@ const Signup = ({ navigation }: SignupProps) => {
         text: apiError,
         duration: Snackbar.LENGTH_LONG,
       })
-      dispatch(resetSignup())
+      dispatch(resetAll())
     }
   }, [dispatch, apiError, apiSuccess]);
 

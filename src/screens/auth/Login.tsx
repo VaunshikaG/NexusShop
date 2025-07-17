@@ -18,7 +18,6 @@ const Login = ({ navigation }: LoginProps) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const dispatch: AppDispatch = useDispatch()
     const { isLoggedIn, isLoading, apiError, apiSuccess } = useSelector((state: RootState) => state.authentication);
@@ -37,21 +36,26 @@ const Login = ({ navigation }: LoginProps) => {
             setError(apiError)
             dispatch(resetAll())
         }
-    }), [isLoggedIn, apiError]
+    }), [dispatch, isLoggedIn, apiError]
 
     const handleLogin = () => {
-        if (
-            username.length < 1 ||
-            password.length < 1
-        ) {
-            setError('Please fill all fields')
-        } else {
-            const user: LoginReqModel = {
-                username: username,
-                password: password,
-            }
-            dispatch(loginUser(user))
+        const user: LoginReqModel = {
+            username: 'qwerty',
+            password: 'test123',
         }
+        dispatch(loginUser(user))
+        // if (
+        //     username.length < 1 ||
+        //     password.length < 1
+        // ) {
+        //     setError('Please fill all fields')
+        // } else {
+        //     const user: LoginReqModel = {
+        //         username: username,
+        //         password: password,
+        //     }
+        //     dispatch(loginUser(user))
+        // }
     }
 
     return (

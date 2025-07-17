@@ -1,14 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState } from "../../state/authState";
 import { signupUser, loginUser } from "./authTrunks";
 import { Constants } from "../../../utils/constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState: AuthState = {
     isLoggedIn: false,
     isLoading: false,
     apiSuccess: false,
     apiError: null,
-    token: null,
+    userData: null,
 };
 
 export const authSlice = createSlice({
@@ -20,29 +21,31 @@ export const authSlice = createSlice({
             state.apiSuccess = false;
             state.isLoading = false;
             state.apiError = null;
-            state.token = null;
+            state.userData = null;
+            AsyncStorage.removeItem(Constants.token);
+            AsyncStorage.removeItem(Constants.isLoggedIn);
         },
-        resetAll: state => initialState,
+        resetAll: state => {
+            return initialState;
+        },
     },
     extraReducers: (builder) => {
         builder
             .addCase(signupUser.pending, (state) => {
                 state.isLoading = true;
                 state.apiSuccess = false;
-                state.isLoggedIn = false;
                 state.apiError = null;
-                state.token = null;
             })
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.apiSuccess = true;
-                state.isLoggedIn = true;
+                state.isLoggedIn = false;
+                state.apiError = null;
             })
             .addCase(signupUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.apiSuccess = false;
                 state.isLoggedIn = false;
-                state.token = null;
                 state.apiError = (action.payload as string) || action.error.message || Constants.error;
                 console.error('Registration failed:', action.payload);
             })
@@ -51,22 +54,23 @@ export const authSlice = createSlice({
                 state.apiSuccess = false;
                 state.isLoggedIn = false;
                 state.apiError = null;
-                state.token = null;
+                state.userData = null;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.apiSuccess = true;
                 state.isLoggedIn = true;
                 state.apiError = null;
-                state.token = action.payload.data.data.accessToken;
+                state.userData = action.payload.data.data;
+                console.log('login: ' , action.payload)
             })
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.apiSuccess = false;
                 state.isLoggedIn = false;
-                state.token = null;
+                state.userData = null;
                 state.apiError = (action.payload as string) || action.error.message || Constants.error;
-                console.error('login failed:', action.payload);
+                console.error('login failed:', state.apiError);
             })
     },
 });

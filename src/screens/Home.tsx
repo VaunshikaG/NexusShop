@@ -3,13 +3,15 @@ import React, { useEffect } from 'react'
 import Loading from '../components/Loading'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types'
-import { useSelector } from 'react-redux'
-import { RootState } from '../redux/store'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../redux/store'
+import { fetchUserInfo } from '../redux/features/user/userTrunks'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home = ({ navigation }: HomeProps) => {
-    const { data, isLoading,  } = useSelector((state: RootState) => state.userInfo);
+    const { data, isLoading } = useSelector((state: RootState) => state.userInfo);
+    const dispatch: AppDispatch = useDispatch()
 
     let userData = null;
     if (data) {
@@ -17,11 +19,12 @@ const Home = ({ navigation }: HomeProps) => {
     }
 
     // useEffect(() => {
-    //     console.log("userInfo : ", userData);
-    //     if (!isLoggedIn) {
-    //         navigation.replace('Splash')
+    //     if (isLoading) {
+    //         dispatch(fetchUserInfo())
     //     }
-    // },)
+
+    // }, [isLoading])
+
 
     return (
         <View style={styles.container}>

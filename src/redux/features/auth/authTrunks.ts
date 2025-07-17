@@ -19,12 +19,21 @@ export const loginUser = createAsyncThunk(
                 return rejectWithValue(parsedData.message || 'Login failed from API response');
             }
 
+            if (!parsedData.data) {
+                console.error("login parsedData:", parsedData);
+                return rejectWithValue('Invalid login response: data is missing.');
+            }
+
             const token = parsedData.data.data.accessToken;
-            await AsyncStorage.setItem(Constants.token, token);
-            await AsyncStorage.setItem(Constants.isLoggedIn, 'true');
+            console.log(token)
+            // await AsyncStorage.setItem(Constants.token, token);
+            // await AsyncStorage.setItem(Constants.isLoggedIn, 'true');
             return parsedData;
 
         } catch (error: any) {
+            if (error instanceof SyntaxError) {
+                return rejectWithValue('Failed to parse API response. Invalid JSON.');
+            }
             return rejectWithValue(error.message || 'Network error during login');
         }
     }

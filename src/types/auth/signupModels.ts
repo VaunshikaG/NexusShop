@@ -4,10 +4,10 @@ export interface SignupResponseData {
     message: string;
     success: boolean;
 }
-interface Data {
+export interface Data {
     user: User;
 }
-interface User {
+export interface User {
     _id: string;
     username: string;
     email: string;
@@ -20,14 +20,14 @@ interface User {
     // avatar: Avatar;
 }
 
-interface Avatar {
+export interface Avatar {
     url: string;
     localPath: string;
     _id: string;
 }
 
 export interface SignupReqModel {
-    userName: string;
+    username: string;
     email: string;
     password: string;
 };

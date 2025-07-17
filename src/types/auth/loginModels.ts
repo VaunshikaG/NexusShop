@@ -5,13 +5,13 @@ export interface LoginResponseData {
   success: boolean;
 }
 
-interface Data {
+export interface Data {
   user: User;
   accessToken: string;
   refreshToken: string;
 }
 
-interface User {
+export interface User {
   _id: string;
   username: string;
   email: string;
@@ -24,7 +24,7 @@ interface User {
   avatar: Avatar;
 }
 
-interface Avatar {
+export interface Avatar {
   url: string;
   localPath: string;
   _id: string;
@@ -32,6 +32,6 @@ interface Avatar {
 
 
 export interface LoginReqModel {
-  email: string;
+  username: string;
   password: string;
 };

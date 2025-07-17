@@ -1,33 +1,55 @@
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../types'
 import { AppTheme } from '../../utils/colors'
 import { Constants } from '../../utils/constants'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../redux/store'
+import Snackbar from 'react-native-snackbar'
+import { login, loginUser, resetSignup } from '../../redux/slice/authSlice'
+import Loading from '../../components/Loading'
+import { LoginReqModel } from '../../types/auth/loginModels'
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
-const Login = ({navigation}: LoginProps) => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [email, setEmail] = useState('')
+const Login = ({ navigation }: LoginProps) => {
+    const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    const handleSignup = () => {
+    const dispatch: AppDispatch = useDispatch()
+    const { isLoggedIn, isLoading, apiError, apiSuccess, loginInfo } = useSelector((state: RootState) => state.authentication);
+
+    useEffect(() => {
+        if (isLoggedIn && apiSuccess) {
+            Snackbar.show({
+                text: loginInfo?.message || Constants.loginSuccess,
+                duration: Snackbar.LENGTH_SHORT,
+            })
+            navigation.replace('Home')
+            setUsername('')
+            setPassword('')
+            setError('')
+        } else if (apiError) {
+            setError(apiError)
+            dispatch(resetSignup())
+        }
+    }), [isLoggedIn, apiError]
+
+    const handleLogin = () => {
         if (
-            email.length < 1 ||
-            password.length < 1 
+            username.length < 1 ||
+            password.length < 1
         ) {
             setError('Please fill all fields')
-        } else if (!email.match(emailRegex)) {
-            setError('Email is not valid')
         } else {
-            const user = {
-                email,
-                password,
+            const user: LoginReqModel = {
+                username: username,
+                password: password,
             }
-            navigation.replace('Home')
+            dispatch(loginUser(user))
         }
     }
 
@@ -39,22 +61,24 @@ const Login = ({navigation}: LoginProps) => {
                 {/* <Loading /> */}
                 <Text style={styles.appName}>{Constants.appName}</Text>
 
-                {/* Email */}
+                {/* username */}
                 <TextInput
-                    value={email}
-                    keyboardType="email-address"
+                    value={username.toLocaleLowerCase()}
                     onChangeText={text => {
                         setError('');
-                        setEmail(text);
+                        setUsername(text);
                     }}
                     placeholderTextColor={AppTheme.primary}
-                    placeholder={Constants.email}
+                    placeholder={Constants.userName}
                     style={styles.input}
                 />
 
                 {/* Password */}
                 <TextInput
                     value={password}
+                    autoCapitalize='none'
+                    textContentType='password'
+                    autoComplete='password'
                     onChangeText={text => {
                         setError('');
                         setPassword(text);
@@ -67,10 +91,11 @@ const Login = ({navigation}: LoginProps) => {
 
                 {/* Validation error */}
                 {error ? <Text style={styles.errorText}>{error}</Text> : null}
+                {isLoading && <Loading />}
 
                 {/* Login button */}
                 <Pressable
-                    onPress={handleSignup}
+                    onPress={handleLogin}
                     style={[styles.btn, { marginTop: error ? 10 : 20 }]}>
                     <Text style={styles.btnText}>{Constants.login}</Text>
                 </Pressable>

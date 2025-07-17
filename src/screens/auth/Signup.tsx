@@ -1,15 +1,19 @@
 import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../../types'
 import { AppTheme } from '../../utils/colors'
 import { Constants } from '../../utils/constants'
 import Loading from '../../components/Loading'
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState, AppDispatch } from '../../redux/store'
+import { resetSignup, signupUser } from '../../redux/slice/authSlice'
+import { SignupReqModel } from '../../types/auth/signupModels'
+import Snackbar from 'react-native-snackbar'
 
 type SignupProps = NativeStackScreenProps<RootStackParamList, 'Signup'>
 
 const Signup = ({ navigation }: SignupProps) => {
-  const [isLoading, setIsLoading] = useState(false)
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -17,26 +21,58 @@ const Signup = ({ navigation }: SignupProps) => {
   const [error, setError] = useState('')
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleSignup = () => {
-    if (
-      username.length < 1 ||
-      email.length < 1 ||
-      password.length < 1 ||
-      confirmPassword.length < 1
-    ) {
-      setError('Please fill all fields')
-    } else if (!email.match(emailRegex)) {
-      setError('Email is not valid')
-    } else if (password !== confirmPassword) {
-      setError('Passwords do not match')
-    } else {
-      const user = {
-        username: username,
-        email,
-        password,
-      }
+  const dispatch: AppDispatch = useDispatch()
+  const { isLoading, apiError, apiSuccess } = useSelector((state: RootState) => state.authentication);
+
+  useEffect(() => {
+    if (apiSuccess) {
       navigation.replace('Home')
+      Snackbar.show({
+        text: Constants.signupSuccess,
+        duration: Snackbar.LENGTH_SHORT,
+      })
+      setError('')
+      setUsername('')
+      setEmail('')
+      setPassword('')
+      setConfirmPassword('')
+    } else if (apiError) {
+      // setError(apiError)
+      Snackbar.show({
+        text: apiError,
+        duration: Snackbar.LENGTH_LONG,
+      })
+      dispatch(resetSignup())
     }
+  }, [dispatch, apiError, apiSuccess]);
+
+  const handleSignup = () => {
+    const user: SignupReqModel = {
+      username: 'qwerty',
+      email: 'qwerty@gmail.com',
+      password: 'test123',
+    }
+    dispatch(signupUser(user))
+    // if (
+    //   username.length < 1 ||
+    //   email.length < 1 ||
+    //   password.length < 1 ||
+    //   confirmPassword.length < 1
+    // ) {
+    //   setError('Please fill all fields')
+    // } else if (!email.match(emailRegex)) {
+    //   setError('Email is not valid')
+    // } else if (password !== confirmPassword) {
+    //   setError('Passwords do not match')
+    // } else {
+    //   const user: SignupReqModel = {
+    //     username: username.toLocaleLowerCase(),
+    //     email: email,
+    //     password: password,
+    //   }
+
+    //   dispatch(signupUser(user))
+    // }
   }
 
   return (
@@ -44,12 +80,11 @@ const Signup = ({ navigation }: SignupProps) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.container}>
       <View style={styles.formContainer}>
-        {/* <Loading /> */}
         <Text style={styles.appName}>{Constants.appName}</Text>
 
         {/* Name */}
         <TextInput
-          value={username}
+          value={username.toLocaleLowerCase()}
           onChangeText={text => {
             setError('');
             setUsername(text);
@@ -63,6 +98,9 @@ const Signup = ({ navigation }: SignupProps) => {
         <TextInput
           value={email}
           keyboardType="email-address"
+          autoCapitalize='none'
+          textContentType='emailAddress'
+          autoComplete='email'
           onChangeText={text => {
             setError('');
             setEmail(text);
@@ -75,6 +113,9 @@ const Signup = ({ navigation }: SignupProps) => {
         {/* Password */}
         <TextInput
           value={password}
+          autoCapitalize='none'
+          textContentType='password'
+          autoComplete='password'
           onChangeText={text => {
             setError('');
             setPassword(text);
@@ -89,6 +130,9 @@ const Signup = ({ navigation }: SignupProps) => {
         <TextInput
           secureTextEntry
           value={confirmPassword}
+          autoCapitalize='none'
+          textContentType='newPassword'
+          autoComplete='new-password'
           onChangeText={text => {
             setError('');
             setConfirmPassword(text);
@@ -100,6 +144,7 @@ const Signup = ({ navigation }: SignupProps) => {
 
         {/* Validation error */}
         {error ? <Text style={styles.errorText}>{error}</Text> : null}
+        {isLoading && <Loading />}
 
         {/* Signup button */}
         <Pressable
@@ -195,7 +240,7 @@ const styles = StyleSheet.create({
   },
   loginLabel: {
     color: AppTheme.blue,
-    textDecorationLine:'underline'
+    textDecorationLine: 'underline'
   },
 });
 

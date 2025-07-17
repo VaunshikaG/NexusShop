@@ -6,9 +6,10 @@ import { SignupReqModel } from "../../types/auth/signupModels";
 import { AuthState } from "../state/authState";
 
 const initialState: AuthState = {
-    loading: false,
-    success: false,
-    error: null,
+    isLoggedIn: false,
+    isLoading: false,
+    apiSuccess: false,
+    apiError: null,
     loginInfo: null,
     signupInfo: null,
 };
@@ -47,47 +48,65 @@ export const authSlice = createSlice({
             state.loginInfo = action.payload;
         },
         logout: (state) => {
+            state.isLoggedIn = false;
+            state.apiSuccess = false;
+            state.isLoading = false;
+            state.apiError = null;
             state.loginInfo = null;
-            state.error = null;
+            state.signupInfo = null;
+        },
+        resetSignup: (state) => {
+            state.isLoggedIn = false;
+            state.apiSuccess = false;
+            state.isLoading = false;
+            state.apiError = null;
+            state.loginInfo = null;
+            state.signupInfo = null;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(signupUser.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.success = false;
+                state.isLoading = true;
+                state.apiError = null;
+                state.apiSuccess = false;
+                state.isLoggedIn = false;
             })
             .addCase(signupUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.success = true;
+                state.isLoading = false;
+                state.apiSuccess = true;
+                state.isLoggedIn = true;
                 state.signupInfo = action.payload;
             })
             .addCase(signupUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload as string;
-                state.success = false;
+                state.isLoading = false;
+                state.apiError = action.payload as string;
+                state.apiSuccess = false;
+                state.isLoggedIn = false;
                 console.error('Registration failed:', action.payload);
             })
             .addCase(loginUser.pending, (state) => {
-                state.loading = true;
-                state.error = null;
-                state.success = false;
+                state.isLoading = true;
+                state.apiError = null;
+                state.apiSuccess = false;
+                state.isLoggedIn = false;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.success = true;
+                state.isLoading = false;
+                state.apiSuccess = true;
+                state.isLoggedIn = true;
                 state.loginInfo = action.payload;
             })
             .addCase(loginUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload as string;
-                state.success = false;
+                state.isLoading = false;
+                state.apiError = action.payload as string;
+                state.apiSuccess = false;
+                state.isLoggedIn = false;
                 console.error('login failed:', action.payload);
             })
     },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, resetSignup } = authSlice.actions;
 
 export default authSlice.reducer;

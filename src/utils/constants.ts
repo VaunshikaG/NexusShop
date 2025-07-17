@@ -14,5 +14,11 @@ export const Constants = {
     resetPassword: "Reset Password",
     resetPasswordSuccess: "Password Reset Successfully",
     signUpAccLabel: `Already have an account?${'  '}`,
-    loginAccLabel: `Don't have an account?${'  '}`
+    loginAccLabel: `Don't have an account?${'  '}`, 
+    signupSuccess: 'Account created successfully!!',
+    loginSuccess: 'Account created successfully!!',
+    networkError: 'Network error',
+    loginFail: 'Login failed',
+    signupFail: 'Sign up failed',
+    token: 'token',
 }

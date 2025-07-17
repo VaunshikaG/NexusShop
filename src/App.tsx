@@ -11,6 +11,7 @@ import Signup from './screens/auth/Signup';
 import Login from './screens/auth/Login';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import Home from './screens/Home';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -36,6 +37,11 @@ function App() {
           <Stack.Screen
             name="Login"
             component={Login}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Home"
+            component={Home}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

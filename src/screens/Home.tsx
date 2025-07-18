@@ -10,27 +10,23 @@ import { fetchUserInfo } from '../redux/features/user/userTrunks'
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home = ({ navigation }: HomeProps) => {
-    const { data, isLoading } = useSelector((state: RootState) => state.userInfo);
+    const { data, isLoading, apiError, success } = useSelector((state: RootState) => state.userInfo);
     const dispatch: AppDispatch = useDispatch()
 
-    let userData = null;
-    if (data) {
-        console.log("userInfo : ", data);
-    }
 
-    // useEffect(() => {
-    //     if (isLoading) {
-    //         dispatch(fetchUserInfo())
-    //     }
-
-    // }, [isLoading])
+    useEffect(() => {
+        dispatch(fetchUserInfo())
+        if (isLoading && success) {
+            console.log('home: ', isLoading, success);
+        }
+    }, [])
 
 
     return (
         <View style={styles.container}>
             <Text>Home</Text>
             <Text>{data?.username}</Text>
-            {/* {isLoading ? <Loading /> : <Text>Logged in as {user?.username}</Text>} */}
+            {isLoading ? <Loading /> : <Text>Logged in as {data?.username}</Text>}
         </View>
     )
 }

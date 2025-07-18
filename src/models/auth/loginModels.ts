@@ -1,11 +1,11 @@
 export interface LoginResponseData {
   statusCode: number;
-  data: LoginData;
+  data: Data;
   message: string;
   success: boolean;
 }
 
-export interface LoginData {
+export interface Data {
   user: User;
   accessToken: string;
   refreshToken: string;
@@ -13,6 +13,7 @@ export interface LoginData {
 
 export interface User {
   _id: string;
+  avatar: Avatar;
   username: string;
   email: string;
   role: string;
@@ -21,7 +22,6 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
   __v: number;
-  avatar: Avatar;
 }
 
 export interface Avatar {
@@ -29,6 +29,7 @@ export interface Avatar {
   localPath: string;
   _id: string;
 }
+
 
 
 export interface LoginReqModel {

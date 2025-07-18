@@ -23,4 +23,6 @@ export const Constants = {
     token: 'token',
     isLoggedIn: 'false',
     error: 'Something went wrong',
+    tryAgain: 'Please try again',
+    checkCredentials: 'Please check your credentials',
 }

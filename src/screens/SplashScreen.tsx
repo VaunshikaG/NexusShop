@@ -3,18 +3,35 @@ import { View, Image, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/index';
 import Video from 'react-native-video';
+import { useDispatch, useSelector } from 'react-redux';
+import Loading from '../components/Loading';
+import { AppDispatch, RootState } from '../redux/store';
+import { loadUserFromStorage } from '../redux/features/auth/authTrunks';
 
 type SplashScreenProps = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
+    const dispatch: AppDispatch = useDispatch()
+    const { isAuthenticated } = useSelector((state: RootState) => state.authentication);
+
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            navigation.replace('Signup');
-        }, 2000);
+        dispatch(loadUserFromStorage())
+            .then((response) => {
+                // console.log('loadUserFromStorage: ', response);
+                
+                const timer = setTimeout(() => {
+                    if (isAuthenticated) {
+                        navigation.replace('Signup');
+                    } else {
+                        navigation.replace('Home')
+                    }
+                }, 2000);
 
-        return () => clearTimeout(timer);
-    }, []);
+                return () => clearTimeout(timer);
+
+            });
+    }, [dispatch]);
 
     return (
         <View style={styles.container}>
@@ -48,7 +65,13 @@ const styles = StyleSheet.create({
         position: 'absolute',
         width: 200,
         height: 200
-    }
+    },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#f5f5f5',
+    },
 });
 
 export default SplashScreen;

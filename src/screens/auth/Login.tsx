@@ -1,114 +1,170 @@
-import { KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../../types'
-import { AppTheme } from '../../utils/colors'
-import { Constants } from '../../utils/constants'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../../redux/store'
-import Snackbar from 'react-native-snackbar'
-import Loading from '../../components/Loading'
-import { LoginReqModel } from '../../models/auth/loginModels'
-import { resetAll } from '../../redux/features/auth/authSlice'
-import { loginUser } from '../../redux/features/auth/authTrunks'
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, Pressable } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearError } from '../../redux/features/auth/authSlice';
+import { AppDispatch, RootState } from '../../redux/store';
+import Snackbar from 'react-native-snackbar';
+import { loginUser } from '../../redux/features/auth/authTrunks';
+import { Constants } from '../../utils/constants';
+import { AppTheme } from '../../utils/colors';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../types';
+import { LoginReqModel } from '../../models/auth/loginModels';
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, 'Login'>
 
 const Login = ({ navigation }: LoginProps) => {
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+    });
 
-    const dispatch: AppDispatch = useDispatch()
-    const { isLoggedIn, isLoading, apiError, apiSuccess } = useSelector((state: RootState) => state.authentication);
+    const [errors, setErrors] = useState({
+        username: '',
+        password: '',
+    });
 
-    useEffect(() => {
-        if (isLoggedIn && apiSuccess) {
+    const [showPassword, setShowPassword] = useState(false);
+
+    const dispatch: AppDispatch = useDispatch();
+    const { isLoading } = useSelector((state: RootState) => state.authentication);
+
+    const validateForm = () => {
+        let isValid = true;
+        const newErrors = { username: '', password: '' };
+
+        dispatch(clearError());
+
+        if (!formData.username.trim()) {
+            newErrors.username = 'Username is required';
+            isValid = false;
+        }
+
+        if (!formData.password) {
+            newErrors.password = 'Password is required';
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+
+    const handleInputChange = (field: string, value: string) => {
+        setFormData(prev => ({
+            ...prev,
+            [field]: value,
+        }));
+
+        if (errors[field as keyof typeof errors]) {
+            setErrors(prev => ({
+                ...prev,
+                [field]: '',
+            }));
+        }
+    };
+
+    const handleLogin = async () => {
+        if (!validateForm()) return;
+
+        try {
+              const user: LoginReqModel = {
+                  username: formData.username.trim().toLowerCase(),
+                  password: formData.password,
+                //   username: 'qwerty',
+                //   password: 'test123',
+              }
+            const result = await dispatch(loginUser(user));
+
+            if (loginUser.fulfilled.match(result)) {
+                Snackbar.show({
+                    text: Constants.loginSuccess || 'Login successful!',
+                    duration: Snackbar.LENGTH_SHORT,
+                });
+                navigation.replace('Home');
+            } else {
+                console.log('loginerror: ' , result);
+                
+                const errorMessage = result.payload as string;
+                Snackbar.show({
+                    text: errorMessage || Constants.tryAgain,
+                    duration: Snackbar.LENGTH_SHORT,
+                });
+            }
+        } catch (error) {
+            console.error('Login error:', error);
             Snackbar.show({
-                text: Constants.loginSuccess,
+                text: error as string || Constants.tryAgain,
                 duration: Snackbar.LENGTH_SHORT,
-            })
-            navigation.replace('Home')
-            setUsername('')
-            setPassword('')
-            setError('')
-        } else if (apiError) {
-            setError(apiError)
-            dispatch(resetAll())
+            });
         }
-    }), [dispatch, isLoggedIn, apiError]
+    };
 
-    const handleLogin = () => {
-        const user: LoginReqModel = {
-            username: 'qwerty',
-            password: 'test123',
-        }
-        dispatch(loginUser(user))
-        // if (
-        //     username.length < 1 ||
-        //     password.length < 1
-        // ) {
-        //     setError('Please fill all fields')
-        // } else {
-        //     const user: LoginReqModel = {
-        //         username: username,
-        //         password: password,
-        //     }
-        //     dispatch(loginUser(user))
-        // }
-    }
+    const navigateToSignup = () => {
+        navigation.replace('Signup');
+    };
 
     return (
         <KeyboardAvoidingView
+            style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            style={styles.container}>
+        >
             <View style={styles.formContainer}>
-                {/* <Loading /> */}
                 <Text style={styles.appName}>{Constants.appName}</Text>
 
-                {/* username */}
+                {/* Username Input */}
                 <TextInput
-                    value={username.toLocaleLowerCase()}
-                    onChangeText={text => {
-                        setError('');
-                        setUsername(text);
-                    }}
+                    style={[styles.input, errors.username ? styles.errorText : null]}
                     placeholderTextColor={AppTheme.primary}
-                    placeholder={Constants.userName}
-                    style={styles.input}
+                    placeholder={'Username'}
+                    value={formData.username}
+                    onChangeText={value => handleInputChange('username', value)}
+                    autoCapitalize="none"
+                    autoCorrect={false}
                 />
+                {errors.username ? (
+                    <Text style={styles.errorText}>{errors.username}</Text>
+                ) : (
+                    <View style={styles.space} />
+                )}
 
-                {/* Password */}
+                {/* Password Input */}
                 <TextInput
-                    value={password}
-                    autoCapitalize='none'
-                    textContentType='password'
-                    autoComplete='password'
-                    onChangeText={text => {
-                        setError('');
-                        setPassword(text);
-                    }}
+                    style={[styles.input, errors.password ? styles.errorText : null]}
                     placeholderTextColor={AppTheme.primary}
-                    placeholder={Constants.password}
-                    secureTextEntry
-                    style={styles.input}
+                    placeholder={'Password'}
+                    value={formData.password}
+                    onChangeText={value => handleInputChange('password', value)}
+                    secureTextEntry={!showPassword}
+                    autoCapitalize="none"
                 />
+                {/* <TouchableOpacity
+          style={styles.eyeButton}
+          onPress={() => setShowPassword(!showPassword)}
+        >
+          <Text style={styles.eyeText}>{showPassword ? '🙈' : '👁️'}</Text>
+        </TouchableOpacity> */}
+                {errors.password ? (
+                    <Text style={styles.errorText}>{errors.password}</Text>
+                ) : (
+                    <View style={styles.space} />
+                )}
 
-                {/* Validation error */}
-                {error ? <Text style={styles.errorText}>{error}</Text> : null}
-                {isLoading && <Loading />}
-
-                {/* Login button */}
-                <Pressable
+                <TouchableOpacity
+                    style={[styles.btn, isLoading ? styles.buttonDisabled : null]}
                     onPress={handleLogin}
-                    style={[styles.btn, { marginTop: error ? 10 : 20 }]}>
-                    <Text style={styles.btnText}>{Constants.login}</Text>
-                </Pressable>
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <ActivityIndicator color="#fff" />
+                    ) : (
+                        <Text style={styles.btnText}>Login</Text>
+                    )}
+                </TouchableOpacity>
 
-                {/* Signup navigation */}
                 <Pressable
-                    onPress={() => navigation.replace('Signup')}
-                    style={styles.signupContainer}>
+                    onPress={navigateToSignup}
+                    style={styles.signupContainer}
+                >
                     <Text style={styles.haveAccountLabel}>
                         {Constants.loginAccLabel}
                         <Text style={styles.signupLabel}>{Constants.signup}</Text>
@@ -116,11 +172,13 @@ const Login = ({ navigation }: LoginProps) => {
                 </Pressable>
             </View>
         </KeyboardAvoidingView>
-    )
-}
-
+    );
+};
 
 const styles = StyleSheet.create({
+    space: {
+        height: 6,
+    },
     container: {
         flex: 1,
         backgroundColor: AppTheme.primary,
@@ -144,19 +202,13 @@ const styles = StyleSheet.create({
         height: 40,
         alignSelf: 'center',
         borderRadius: 5,
-
         width: '80%',
         color: AppTheme.primary,
-
         marginTop: 10,
         shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
+        shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.23,
         shadowRadius: 2.62,
-
         elevation: 1,
     },
     errorText: {
@@ -169,12 +221,10 @@ const styles = StyleSheet.create({
         backgroundColor: AppTheme.secondary,
         padding: 10,
         height: 45,
-
         alignSelf: 'center',
         borderRadius: 5,
         width: '80%',
         marginTop: 10,
-
         elevation: 3,
     },
     btnText: {
@@ -182,6 +232,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         fontWeight: 'bold',
         fontSize: 18,
+    },
+    buttonDisabled: {
+        backgroundColor: AppTheme.primary_2,
+        shadowOpacity: 0,
+        elevation: 0,
     },
     signupContainer: {
         marginTop: 60,
@@ -197,4 +252,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login
+export default Login;

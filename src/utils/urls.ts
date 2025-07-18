@@ -3,6 +3,7 @@ export const AppUrls = {
     loginUrl: 'users/login',
     forgetPasswordUrl: 'users/forgot-password',
     signupUrl: 'users/register',
+    getUser: 'users/current-user',
     logoutUrl: 'users/logout',
     productsUrl: 'ecommerce/products',
     profileUrl: 'ecommerce/profile',

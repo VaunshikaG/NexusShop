@@ -25,6 +25,8 @@ export const loginApi = async (reqModel: LoginReqModel): Promise<string> => {
         const data = await response.text();
 
         // return data.data;
+        // console.log('api_data: ', data);
+        
         return data;
 
     } catch (error: any) {
@@ -33,7 +35,7 @@ export const loginApi = async (reqModel: LoginReqModel): Promise<string> => {
     }
 };
 
-export const signupApi = async (reqModel: SignupReqModel): Promise<SignupResponseData> => {
+export const signupApi = async (reqModel: SignupReqModel): Promise<string> => {
     const url = AppUrls.appUrl + AppUrls.signupUrl;
     console.log(url);
 
@@ -48,15 +50,9 @@ export const signupApi = async (reqModel: SignupReqModel): Promise<SignupRespons
 
     try {
         const response = await fetch(url, options);
-        const data: ApiResponse<SignupResponseData> = await response.json();
+        const data = await response.text();
 
-        if (!response.ok || data.success === false && data.statusCode === 200) {
-            Snackbar.show({
-                text: data.message || Constants.loginFail,
-                duration: Snackbar.LENGTH_SHORT,
-            })
-        }
-        return data.data;
+        return data;
 
     } catch (error: any) {
         console.error('Register API Error:', error);
@@ -65,7 +61,7 @@ export const signupApi = async (reqModel: SignupReqModel): Promise<SignupRespons
 };
 
 export const fetchUserApi = async (): Promise<string> => {
-    const url = AppUrls.appUrl + AppUrls.signupUrl;
+    const url = AppUrls.appUrl + AppUrls.getUser;
 
     const token = await AsyncStorage.getItem(Constants.token);
     if (!token) throw new Error('No auth token found');

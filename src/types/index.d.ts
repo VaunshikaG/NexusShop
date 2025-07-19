@@ -1,3 +1,5 @@
+import { Datum } from "../models/products/productsModel";
+
 // type
 export type RootStackParamList = {
   Splash: undefined;
@@ -5,7 +7,7 @@ export type RootStackParamList = {
   Login: undefined
   Signup: undefined;
   ForgotPassword: undefined;
-  Details: undefined;
+  Details: {data: Datum};
   AddToCart: undefined;
   Favourites: undefined;
   Profile: undefined;

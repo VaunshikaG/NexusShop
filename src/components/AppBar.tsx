@@ -4,24 +4,35 @@ import { AppTheme } from '../utils/colors'
 import Icon from '@react-native-vector-icons/fontawesome6'
 import MaterialIcons from '@react-native-vector-icons/evil-icons'
 
-const AppBar = () => {
+type AppBarProps = {
+  onCartPress: () => void;
+  onProfilePress: () => void;
+};
+
+export default function AppBar({ onCartPress, onProfilePress }: AppBarProps) {
   return (
     <View style={styles.container}>
 
-        <View style={styles.appBar}>
-          <Text style={styles.title}>Hello, user</Text>
+      <View style={styles.appBar}>
+        <Text style={styles.title}>The Nexus Shop</Text>
 
-          <View style={styles.iconContainer}>
-            <TouchableOpacity style={styles.appBarIcon} >
-              <Icon name='cart-shopping' iconStyle='solid' size={20} color={AppTheme.beige} />
-            </TouchableOpacity>
+        <View style={styles.iconContainer}>
+          <TouchableOpacity
+            style={styles.appBarIcon}
+            onPress={onCartPress}
+          >
+            <Icon name='cart-shopping' iconStyle='solid' size={20} color={AppTheme.beige} />
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.iconContainer}>
-              <MaterialIcons name='cart' size={20} color={AppTheme.beige} style={styles.appBarIcon} />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={onProfilePress}
+          >
+            <MaterialIcons name='cart' size={20} color={AppTheme.beige} style={styles.appBarIcon} />
+          </TouchableOpacity>
         </View>
       </View>
+    </View>
   )
 }
 
@@ -49,6 +60,8 @@ const styles = StyleSheet.create({
     color: AppTheme.secondary_2,
     textAlign: 'center',
     fontWeight: 'bold',
+    fontFamily: "adobe-handwriting-ernie",
+
   },
   iconContainer: {
     flexDirection: 'row',
@@ -57,5 +70,3 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   }
 })
-
-export default AppBar

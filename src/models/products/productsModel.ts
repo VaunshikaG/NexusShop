@@ -6,35 +6,26 @@ export interface ProductResponseData {
 }
 
 export interface ProductData {
-    products: Product[];
-    totalProducts: number;
-    limit: number;
     page: number;
+    limit: number;
     totalPages: number;
-    serialNumberStartFrom: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    prevPage: null;
-    nextPage: null;
+    previousPage: boolean;
+    nextPage: boolean;
+    totalItems: number;
+    currentPageItems: number;
+    data: Datum[];
 }
 
-export interface Product {
-    _id: string;
-    category: string;
+export interface Datum {
+    id: number;
+    title: string;
     description: string;
-    mainImage: Image;
-    name: string;
-    owner: string;
     price: number;
+    discountPercentage: number;
+    rating: number;
     stock: number;
-    subImages: Image[];
-    createdAt: Date;
-    updatedAt: Date;
-    __v: number;
-}
-
-export interface Image {
-    url: string;
-    localPath: string;
-    _id: string;
+    brand: string;
+    category: string;
+    thumbnail: string;
+    images: string[];
 }

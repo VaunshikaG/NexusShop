@@ -6,9 +6,9 @@ import { getProductsApi } from "../../../services/services";
 export const fetchProducts = createAsyncThunk(
     AppUrls.productsUrl,
 
-    async (page: number, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const data = await getProductsApi(page);
+            const data = await getProductsApi();
 
             const parsedData: ProductResponseData = JSON.parse(data);
 

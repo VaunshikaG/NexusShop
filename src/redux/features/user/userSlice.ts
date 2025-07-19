@@ -11,12 +11,12 @@ const initialState: UserInfoState = {
 };
 
 export const userSlice = createSlice({
-    name: 'user',
-    initialState,
-    reducers: {
-        clearUserInfo: (state) => initialState,
-    },
-    extraReducers: (builder) => {
+  name: 'user',
+  initialState,
+  reducers: {
+    clearUserInfo: (state) => initialState,
+  },
+  extraReducers: (builder) => {
     builder
       .addCase(fetchUserInfo.pending, (state) => {
         state.isLoading = true;
@@ -28,12 +28,13 @@ export const userSlice = createSlice({
         state.success = true;
         state.apiError = null;
         state.data = action.payload.data;
+        console.log('user_info fulfilled: ', action.payload);
       })
       .addCase(fetchUserInfo.rejected, (state, action) => {
         state.isLoading = false;
         state.success = true;
         state.apiError = (action.payload as string) || action.error.message || Constants.error;
-        console.log('user_info failed:', state.apiError);
+        console.log('user_info reject: ', state.apiError);
       });
   }
 });

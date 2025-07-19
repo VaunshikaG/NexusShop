@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { AuthState } from "../../state/authState";
-import { loadUserFromStorage, loginUser, logoutUser, signupUser } from "./authTrunks";
+import { loadUserFromStorage, loginUser, clearStorage, signupUser } from "./authTrunks";
 import { Constants } from "../../../utils/constants";
 
 const initialState: AuthState = {
@@ -19,6 +19,7 @@ const authSlice = createSlice({
         setLoading: (state, action) => {
             state.isLoading = action.payload;
         },
+        logout: state => initialState,
     },
     extraReducers: (builder) => {
         builder
@@ -37,7 +38,7 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.isAuthenticated = false;
                 state.apiError = (action.payload as string) || action.error.message || Constants.error;
-                console.log('login failed:', state.apiError);
+                console.log('login reject:', state.apiError);
             })
             // Register cases
             .addCase(signupUser.pending, (state) => {
@@ -51,7 +52,7 @@ const authSlice = createSlice({
             .addCase(signupUser.rejected, (state, action) => {
                 state.isLoading = false;
                 state.apiError = (action.payload as string) || action.error.message || Constants.error;
-                console.log('signup failed:', state.apiError);
+                console.log('signup reject:', state.apiError);
             })
             // Load from storage cases
             .addCase(loadUserFromStorage.pending, (state) => {
@@ -66,15 +67,15 @@ const authSlice = createSlice({
                 state.isLoading = false;
                 state.isAuthenticated = false;
                 state.apiError = (action.payload as string) || action.error.message || Constants.error;
-                console.log('storage failed:', state.apiError);
+                console.log('storage reject:', state.apiError);
             })
             // Logout cases
-            .addCase(logoutUser.fulfilled, (state) => {
+            .addCase(clearStorage.fulfilled, (state) => {
                 state.isAuthenticated = false;
                 state.apiError = null;
             });
     },
 });
 
-export const { clearError, setLoading } = authSlice.actions;
+export const { clearError, setLoading, logout } = authSlice.actions;
 export default authSlice.reducer;

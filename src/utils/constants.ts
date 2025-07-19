@@ -25,4 +25,5 @@ export const Constants = {
     error: 'Something went wrong',
     tryAgain: 'Please try again',
     checkCredentials: 'Please check your credentials',
+    tokenExpiry: 'Please login/signup.'
 }

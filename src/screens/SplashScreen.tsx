@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/index';
-import Video from 'react-native-video';
 import { useDispatch, useSelector } from 'react-redux';
-import Loading from '../components/Loading';
 import { AppDispatch, RootState } from '../redux/store';
-import { loadUserFromStorage } from '../redux/features/auth/authTrunks';
+import { loadUserFromStorage, clearStorage, loginUser } from '../redux/features/auth/authTrunks';
+import { logout } from '../redux/features/auth/authSlice';
+import Snackbar from 'react-native-snackbar';
+import { Constants } from '../utils/constants';
 
 type SplashScreenProps = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
@@ -14,24 +15,37 @@ const SplashScreen = ({ navigation }: SplashScreenProps) => {
     const dispatch: AppDispatch = useDispatch()
     const { isAuthenticated } = useSelector((state: RootState) => state.authentication);
 
-
     useEffect(() => {
-        dispatch(loadUserFromStorage())
-            .then((response) => {
-                // console.log('loadUserFromStorage: ', response);
-                
-                const timer = setTimeout(() => {
-                    if (isAuthenticated) {
-                        navigation.replace('Signup');
-                    } else {
-                        navigation.replace('Home')
-                    }
-                }, 2000);
-
-                return () => clearTimeout(timer);
-
-            });
+        loadData()
     }, [dispatch]);
+
+    const loadData = async () => {
+        const result = await dispatch(loadUserFromStorage())
+
+        if (loadUserFromStorage.rejected.match(result)) {
+            console.log('loadData reject: ', result);
+
+            const errorMessage = result.error as string;
+            Snackbar.show({
+                text: errorMessage || Constants.tokenExpiry,
+                duration: Snackbar.LENGTH_SHORT,
+            });
+            dispatch(logout())
+            dispatch(clearStorage())
+
+        } else {
+            console.log('loadData done: ', result);
+            const timer = setTimeout(() => {
+                if (isAuthenticated) {
+                    navigation.replace('Signup');
+                } else {
+                    navigation.replace('Home')
+                }
+            }, 2000);
+
+            return () => clearTimeout(timer);
+        }
+    }
 
     return (
         <View style={styles.container}>

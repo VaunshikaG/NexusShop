@@ -1,5 +1,4 @@
 import Snackbar from "react-native-snackbar";
-import { ApiResponse } from "../types/apiResponse";
 import { LoginReqModel, LoginResponseData } from "../models/auth/loginModels";
 import { SignupReqModel, SignupResponseData } from "../models/auth/signupModels";
 import { Constants } from "../utils/constants";
@@ -86,3 +85,23 @@ export const fetchUserApi = async (): Promise<string> => {
     }
 };
 
+export const getProductsApi = async (pgNumber: number): Promise<string> => {
+    const url = AppUrls.appUrl + AppUrls.productsUrl + `?page=${pgNumber}&limit=&inc=all&query=all`;
+
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+        }
+    }
+
+    try {
+        const response = await fetch(url, options);
+        const data = await response.text()
+        return data;
+    } catch (error: any) {
+        console.error('Register API Error:', error);
+        throw new Error(error.message || Constants.networkError);
+    }
+}

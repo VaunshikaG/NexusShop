@@ -5,19 +5,21 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack'
 import { RootStackParamList } from '../types'
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../redux/store'
-import { fetchUserInfo } from '../redux/features/user/userTrunks'
+import { fetchProducts } from '../redux/features/product/productTrunk'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home = ({ navigation }: HomeProps) => {
-    const { data, isLoading, apiError, success } = useSelector((state: RootState) => state.userInfo);
+    const { data, isLoading, apiError, success } = useSelector((state: RootState) => state.products);
     const dispatch: AppDispatch = useDispatch()
 
 
     useEffect(() => {
-        dispatch(fetchUserInfo())
+        dispatch(fetchProducts())
         if (isLoading && success) {
             console.log('home: ', isLoading, success);
+            console.log(data);
+            
         }
     }, [])
 
@@ -25,8 +27,7 @@ const Home = ({ navigation }: HomeProps) => {
     return (
         <View style={styles.container}>
             <Text>Home</Text>
-            <Text>{data?.username}</Text>
-            {isLoading ? <Loading /> : <Text>Logged in as {data?.username}</Text>}
+            {isLoading ? <Loading /> : <Text>Products: {data?.totalProducts}</Text>}
         </View>
     )
 }

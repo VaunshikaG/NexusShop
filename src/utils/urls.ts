@@ -5,7 +5,7 @@ export const AppUrls = {
     signupUrl: 'users/register',
     getUser: 'users/current-user',
     logoutUrl: 'users/logout',
-    productsUrl: 'ecommerce/products',
+    productsUrl: 'public/randomproducts',
     profileUrl: 'ecommerce/profile',
     cartUrl: 'ecommerce/cart/item/',
 }

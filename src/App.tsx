@@ -5,12 +5,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './types/index';
 
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+
 import SplashScreen from './screens/SplashScreen';
 import Signup from './screens/auth/Signup';
 import Login from './screens/auth/Login';
 import Home from './screens/Home';
-import { Provider } from 'react-redux';
-import { store } from './redux/store';
 import Profile from './screens/Profile';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();

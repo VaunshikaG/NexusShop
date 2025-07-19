@@ -111,8 +111,8 @@ export const loadUserFromStorage = createAsyncThunk(
 );
 
 // Logout async thunk
-export const logoutUser = createAsyncThunk(
-    'auth/logout',
+export const clearStorage = createAsyncThunk(
+    'auth/clear_storage',
     async (_, { rejectWithValue }) => {
         try {
             await AsyncStorage.removeItem(Constants.token);

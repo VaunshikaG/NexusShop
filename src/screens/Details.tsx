@@ -1,8 +1,12 @@
-import { Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { Datum } from '../models/products/productsModel';
+import { AppTheme } from '../utils/colors';
+import Icon from '@react-native-vector-icons/fontawesome6';
+
+const { width } = Dimensions.get('window');
 
 type DetailProps = NativeStackScreenProps<RootStackParamList, 'Details'>
 
@@ -12,238 +16,180 @@ type DetailsType = {
 
 const Details = ({ route, navigation }: DetailProps) => {
     const data = route.params;
-    const [selectedSize, setSelectedSize] = useState('S');
-
-    const product = {
-        name: 'Pink Blazer',
-        price: '$250',
-        description: 'Pink blazer with soft material, not too comfortable sizing, available in various sizes, suitable for use in parties.',
-        image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?w=300&h=400&fit=crop',
-        sizes: ['S', 'M', 'L', 'XL'],
-    };
 
     return (
-        <SafeAreaView style={detailStyles.container}>
-            <StatusBar barStyle="light-content" backgroundColor="#FF8FA3" />
-
-            {/* Header */}
-            <View style={detailStyles.header}>
-                <TouchableOpacity
-                    style={detailStyles.backButton}
-                    onPress={() => navigation.goBack()}>
-                    <Text style={detailStyles.backText}>←</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={detailStyles.cartButton}
-                    onPress={() => navigation.navigate('AddToCart')}>
-                    <Text style={detailStyles.cartText}>🛒</Text>
-                </TouchableOpacity>
-            </View>
+        <View style={styles.container}>
 
             <ScrollView showsVerticalScrollIndicator={false}>
-                {/* Product Image */}
-                <View style={detailStyles.imageContainer}>
-                    <Image source={{ uri: product.image }} style={detailStyles.productImage} />
+                <View style={styles.imageContainer}>
+                    <Image source={{ uri: 'https://i.pinimg.com/736x/12/c6/99/12c6996bb98d720960d0cc34570e0ba7.jpg' }} style={styles.productImage} resizeMode="cover" />
+                    {/* <ScrollView
+                        horizontal
+                        pagingEnabled
+                        showsHorizontalScrollIndicator={false}
+                        style={styles.imageScrollView}
+                    >
+                        {data.data.images.map((imgUri, index) => (
+                            <Image
+                                key={index}
+                                source={{ uri: imgUri }}
+                                style={styles.productImage}
+                                resizeMode="cover"
+                            />
+                        ))}
+                    </ScrollView> */}
+
+                    <TouchableOpacity
+                        style={[styles.iconButton, styles.topLeftIcon]}
+                        onPress={() => navigation.goBack()}
+                    >
+                        <Icon name="arrow-left" size={20} color={AppTheme.secondary} iconStyle='solid' />
+                    </TouchableOpacity>
                 </View>
 
-                {/* Product Info */}
-                <View style={detailStyles.productInfo}>
-                    <Text style={detailStyles.productName}>{product.name}</Text>
-                    <Text style={detailStyles.productPrice}>{product.price}</Text>
-
-                    <Text style={detailStyles.description}>{product.description}</Text>
-
-                    {/* Size Selection */}
-                    <Text style={detailStyles.sizeLabel}>Size</Text>
-                    <View style={detailStyles.sizeContainer}>
-                        {(product.sizes || ['S', 'M', 'L', 'XL']).map((size) => (
-                            <TouchableOpacity
-                                key={size}
-                                style={[
-                                    detailStyles.sizeButton,
-                                    selectedSize === size && detailStyles.selectedSize,
-                                ]}
-                            // onPress={() => setSelectedSize(size)}
-                            >
-                                <Text
-                                    style={[
-                                        detailStyles.sizeText,
-                                        selectedSize === size && detailStyles.selectedSizeText,
-                                    ]}>
-                                    {size}
-                                </Text>
-                            </TouchableOpacity>
-                        ))}
+                <View style={styles.detailsCard}>
+                    <View style={styles.headerRow}>
+                        <View>
+                            <Text style={styles.productName}>{data.data.title || 'Product Name'}</Text>
+                            <Text style={styles.productCategory}>{data.data.category || 'Dagadia jacket'}</Text>
+                        </View>
+                        <Text style={styles.productPrice}>${data.data.price ? data.data.price.toFixed(2) : 'N/A'}</Text>
                     </View>
 
-                    {/* Color Selection */}
-                    <Text style={detailStyles.colorLabel}>Color</Text>
-                    <View style={detailStyles.colorContainer}>
-                        <TouchableOpacity style={[detailStyles.colorButton, { backgroundColor: '#FF8FA3' }]} />
-                        <TouchableOpacity style={[detailStyles.colorButton, { backgroundColor: '#000' }]} />
-                        <TouchableOpacity style={[detailStyles.colorButton, { backgroundColor: '#8B4513' }]} />
-                    </View>
+                    <Text style={styles.descriptionText}>
+                        {data.data.description}
+                    </Text>
                 </View>
             </ScrollView>
 
-            {/* Buy Now Button */}
-            <View style={detailStyles.bottomContainer}>
-                <TouchableOpacity style={detailStyles.buyButton}>
-                    <Text style={detailStyles.buyButtonText}>Buy Now</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={detailStyles.wishlistButton}>
-                    <Text style={detailStyles.wishlistText}>❤️</Text>
-                </TouchableOpacity>
-            </View>
-        </SafeAreaView>
+            <TouchableOpacity style={styles.buyNowButton}>
+                <Text style={styles.buyNowButtonText}>Buy Now</Text>
+                <Icon name="cart-shopping" size={24} color={AppTheme.beige} iconStyle='solid' />
+            </TouchableOpacity>
+        </View>
     );
 };
 
-const detailStyles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FF8FA3',
+        backgroundColor: AppTheme.primary,
     },
-    header: {
+    appBar: {
+        marginTop: 30,
+        marginBottom: 10,
+        paddingInline: 20,
+        height: 10,
+        backgroundColor: AppTheme.primary,
         flexDirection: 'row',
+        alignItems: 'center',
         justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 20,
-        paddingVertical: 15,
-    },
-    backButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    backText: {
-        fontSize: 20,
-        color: '#fff',
-    },
-    cartButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: 'rgba(255,255,255,0.2)',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    cartText: {
-        fontSize: 18,
+        paddingHorizontal: 16,
+        elevation: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
     },
     imageContainer: {
+        width: '100%',
+        height: width * 1.2,
+        backgroundColor: AppTheme.primary,
+        justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 20,
+        borderBottomLeftRadius: 30,
+        borderBottomRightRadius: 30,
+        overflow: 'hidden',
+        shadowColor: AppTheme.beige,
+        shadowOffset: { width: 0, height: 5 },
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 8,
+    },
+    imageScrollView: {
+        flex: 1,
     },
     productImage: {
-        width: 250,
-        height: 300,
-        borderRadius: 20,
+        width: '100%',
+        height: '100%',
     },
-    productInfo: {
-        backgroundColor: '#fff',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+    iconButton: {
+        position: 'absolute',
+        top: 50,
+        backgroundColor: AppTheme.white,
+        borderRadius: 20,
+        width: 40,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: AppTheme.beige,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 3,
+    },
+    topLeftIcon: {
+        left: 20,
+    },
+    detailsCard: {
+        width: width,
+        backgroundColor: AppTheme.primary,
         padding: 25,
-        minHeight: 400,
+        elevation: 8,
+        paddingBottom: 30,
+    },
+    headerRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginBottom: 15,
     },
     productName: {
-        fontSize: 24,
+        width: "90%",
+        fontSize: 20,
         fontWeight: 'bold',
-        color: '#333',
+        color: AppTheme.primary_3,
         marginBottom: 10,
+    },
+    productCategory: {
+        fontSize: 16,
+        color: AppTheme.primary_3,
     },
     productPrice: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#FF8FA3',
-        marginBottom: 20,
+        color: AppTheme.primary_3,
     },
-    description: {
+    descriptionText: {
         fontSize: 14,
-        color: '#666',
-        lineHeight: 20,
-        marginBottom: 25,
+        color: AppTheme.primary_3,
+        lineHeight: 24,
+        marginBottom: 10,
     },
-    sizeLabel: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 15,
-    },
-    sizeContainer: {
-        flexDirection: 'row',
-        marginBottom: 25,
-    },
-    sizeButton: {
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: '#f5f5f5',
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginRight: 10,
-    },
-    selectedSize: {
-        backgroundColor: '#FF8FA3',
-    },
-    sizeText: {
-        fontSize: 14,
-        color: '#333',
-    },
-    selectedSizeText: {
-        color: '#fff',
-    },
-    colorLabel: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#333',
-        marginBottom: 15,
-    },
-    colorContainer: {
-        flexDirection: 'row',
-    },
-    colorButton: {
-        width: 30,
-        height: 30,
-        borderRadius: 15,
-        marginRight: 10,
-        borderWidth: 2,
-        borderColor: '#ddd',
-    },
-    bottomContainer: {
-        flexDirection: 'row',
-        paddingHorizontal: 25,
-        paddingBottom: 25,
-        backgroundColor: '#fff',
-    },
-    buyButton: {
+    buyNowButton: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
         flex: 1,
-        backgroundColor: '#FF8FA3',
-        paddingVertical: 15,
-        borderRadius: 25,
+        backgroundColor: AppTheme.secondary,
+        paddingVertical: 10,
+        borderRadius: 15,
         alignItems: 'center',
-        marginRight: 15,
-    },
-    buyButtonText: {
-        fontSize: 16,
-        fontWeight: 'bold',
-        color: '#fff',
-    },
-    wishlistButton: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: '#f5f5f5',
+        marginBottom: 20,
+        marginHorizontal: 20,
+        elevation: 6,
+        flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center',
+        alignContent: 'center',
+        width: '90%'
     },
-    wishlistText: {
-        fontSize: 20,
+    buyNowButtonText: {
+        color: AppTheme.white,
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginRight: 15
     },
 });
+
 
 export default Details;

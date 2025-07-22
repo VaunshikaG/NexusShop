@@ -9,15 +9,14 @@ NexusShop is a modern mobile **shopping application** built with [React Native](
 
 | Splash                  | Login                  | Signup                 | Home Screen            | Product Details         |
 |-------------------------|------------------------|------------------------|------------------------|-------------------------|
-| ![](./screenshots/splash.png) | ![](./screenshots/login.png) | ![](./screenshots/signup.png) | ![](./screenshots/home2.png) | ![](./screenshots/details.png) |
+| ![](./assets/imgs/logo_transparent1.gif) | ![](./screenshots/login.png) | ![](./screenshots/signup.png) | ![](./screenshots/home2.png) | ![](./screenshots/details.png) |
 
 
 NexusShop offers a clean, intuitive shopping experience with features like:
 
-- 🔎 Product browsing and filtering  
-- 💳 Add to cart and checkout  
-- 🧾 Order history  
-- 🔒 User authentication  
+- 🔒 User authentication
+- 🔎 Product browsing
+- 💳 Add to cart   
 - 🎨 Custom UI with theming and animations  
 - 🌐 Backend powered via REST APIs
 
@@ -28,11 +27,10 @@ NexusShop offers a clean, intuitive shopping experience with features like:
 | **Framework**     | React Native (`@react-native-community/cli`)    |
 | **State Management** | Redux & Redux Toolkit                         |
 | **Routing**       | React Navigation                                 |
-| **APIs**          | Axios (REST API integration)                     |
+| **APIs**          | Fetch API (REST API integration)                     |
 | **UI/Components** | React Native Paper, Vector Icons                |
 | **Animations**    | Lottie/Animated + Adobe Express animations       |
 | **Authentication** | Token-based (JWT) & Secure Store                |
-| **Notifications** | Firebase Cloud Messaging (FCM)                  |
 | **OS Support**    | Android & iOS (Simulators & Devices)             |
 
 ## 🎨 Logo & Branding

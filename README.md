@@ -71,13 +71,14 @@ npm start     # or yarn start
 ```
 NexusShop/
 ├── assets/                   # Images, fonts, animation assets
-├── components/               # UI components
-├── redux/                    # Redux Toolkit slices & store
-├── screens/                  # App screens
-├── services/                 # API and business logic
-├── navigation/               # Routes & navigators
-├── utils/                    # Theming, constants, helpers
-├── App.tsx                   # Entry component
+├── src
+  ├── components/               # UI components
+  ├── redux/                    # Redux Toolkit slices & store
+  ├── screens/                  # App screens
+  ├── services/                 # API and business logic
+  ├── utils/                    # Theming, constants, helpers
+  ├── App.tsx                   # Entry component
+  ├── AppNavigation.tsx         # Routes & navigators
 └── ...
 ```
 

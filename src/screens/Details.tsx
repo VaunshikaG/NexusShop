@@ -20,7 +20,7 @@ const Details = ({ route, navigation }: DetailProps) => {
         return (
             <View style={styles.errorContainer}>
                 <Text style={styles.errorText}>Product details not found.</Text>
-                <TouchableOpacity style={styles.goBackButton} onPress={() => navsigation.goBack()}>
+                <TouchableOpacity style={styles.goBackButton} onPress={() => navigation.goBack()}>
                     <Text style={styles.goBackButtonText}>Go Back</Text>
                 </TouchableOpacity>
             </View>

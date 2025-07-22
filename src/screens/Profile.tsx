@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import Loading from '../components/Loading';
 import { fetchUserInfo } from '../redux/features/user/userTrunks';
 import { RootState, AppDispatch } from '../redux/store';
+import Loading from '../component/Loading';
 
 const Profile = () => {
     const { data, isLoading, apiError, success } = useSelector((state: RootState) => state.userInfo);

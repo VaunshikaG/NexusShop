@@ -1,6 +1,5 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import AppBar from '../components/AppBar'
 import { AppTheme } from '../utils/colors'
 import Icon from '@react-native-vector-icons/fontawesome6'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
@@ -8,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../redux/store'
 import { fetchProducts } from '../redux/features/product/productTrunk'
 import { RootStackParamList } from '../types'
+import AppBar from '../component/AppBar'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 

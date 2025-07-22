@@ -11,10 +11,11 @@ export const fetchProducts = createAsyncThunk(
             const data = await getProductsApi();
 
             const parsedData: ProductResponseData = JSON.parse(data);
+            console.log(parsedData);
 
-            if (parsedData.success === false) {
+            if (!parsedData) {
                 console.log('fetchProducts parsedData: ', parsedData)
-                return rejectWithValue(parsedData.message || 'Fetch failed from API response')
+                return rejectWithValue('Fetch failed from API response')
             }
             return parsedData;
         } catch (error: any) {

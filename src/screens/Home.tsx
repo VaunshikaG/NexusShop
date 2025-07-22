@@ -1,14 +1,13 @@
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import Loading from '../components/Loading'
-import { NativeStackScreenProps } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../types'
-import { useDispatch, useSelector } from 'react-redux'
-import { AppDispatch, RootState } from '../redux/store'
-import { fetchProducts } from '../redux/features/product/productTrunk'
 import AppBar from '../components/AppBar'
 import { AppTheme } from '../utils/colors'
 import Icon from '@react-native-vector-icons/fontawesome6'
+import { NativeStackScreenProps } from '@react-navigation/native-stack'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../redux/store'
+import { fetchProducts } from '../redux/features/product/productTrunk'
+import { RootStackParamList } from '../types'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
@@ -37,7 +36,7 @@ const Home = ({ navigation }: HomeProps) => {
             
             <ScrollView style={styles.scrollViewFlex} contentContainerStyle={styles.productsGridContainer}>
                 <View style={styles.productsGrid}>
-                    {productsData?.data.map((product) => (
+                    {productsData?.map((product) => (
                         <TouchableOpacity
                             key={product.id}
                             style={styles.productCard}
@@ -109,7 +108,7 @@ const styles = StyleSheet.create({
     },
     productImage: {
         width: '100%',
-        height: 140,
+        height: 120,
         borderRadius: 10,
         marginBottom: 10,
     },

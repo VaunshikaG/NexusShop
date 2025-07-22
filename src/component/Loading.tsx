@@ -1,7 +1,7 @@
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { AppTheme } from '../utils/colors'
 import LottieView from 'lottie-react-native'
+import { StyleSheet, View } from 'react-native'
 
 const Loading = () => {
   return (

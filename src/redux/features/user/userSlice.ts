@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+=======
+import { createSlice } from '@reduxjs/toolkit';
+>>>>>>> ca6d68b (new proj)
 import { UserInfoState } from '../../state/userState';
 import { fetchUserInfo } from './userTrunks';
 import { Constants } from '../../../utils/constants';

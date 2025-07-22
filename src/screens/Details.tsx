@@ -1,8 +1,7 @@
-import { Dimensions, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, NativeScrollEvent, NativeSyntheticEvent, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
-import { Datum } from '../models/products/productsModel';
 import { AppTheme } from '../utils/colors';
 import Icon from '@react-native-vector-icons/fontawesome6';
 
@@ -10,34 +9,66 @@ const { width } = Dimensions.get('window');
 
 type DetailProps = NativeStackScreenProps<RootStackParamList, 'Details'>
 
-type DetailsType = {
-    data: Datum | null;
-}
-
 const Details = ({ route, navigation }: DetailProps) => {
-    const data = route.params;
+    const product_data = route.params.data;
+    const [activeIndex, setActiveIndex] = useState(0);
+    const productImages = (product_data.images && product_data.images.length > 0)
+        ? product_data.images
+        : [product_data.thumbnail];
+
+    if (!product_data) {
+        return (
+            <View style={styles.errorContainer}>
+                <Text style={styles.errorText}>Product details not found.</Text>
+                <TouchableOpacity style={styles.goBackButton} onPress={() => navsigation.goBack()}>
+                    <Text style={styles.goBackButtonText}>Go Back</Text>
+                </TouchableOpacity>
+            </View>
+        );
+    }
+
+    const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+        if (slide !== activeIndex) {
+            setActiveIndex(slide);
+        }
+    };
 
     return (
         <View style={styles.container}>
 
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.imageContainer}>
-                    <Image source={{ uri: 'https://i.pinimg.com/736x/12/c6/99/12c6996bb98d720960d0cc34570e0ba7.jpg' }} style={styles.productImage} resizeMode="cover" />
-                    {/* <ScrollView
+                    <ScrollView
                         horizontal
                         pagingEnabled
-                        showsHorizontalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={true}
                         style={styles.imageScrollView}
                     >
-                        {data.data.images.map((imgUri, index) => (
+                        {product_data.images.map((imgUri, index) => (
                             <Image
                                 key={index}
                                 source={{ uri: imgUri }}
                                 style={styles.productImage}
-                                resizeMode="cover"
+                                resizeMode="contain"
                             />
                         ))}
-                    </ScrollView> */}
+                    </ScrollView>
+
+                    {/* Dot indicators */}
+                    <View style={styles.dotContainer}>
+                        {product_data.images.map((_, index) => (
+                            <View
+                                key={index}
+                                style={[
+                                    styles.dot,
+                                    index === activeIndex ? styles.activeDot : {}
+                                ]}
+                            />
+                        ))}
+                    </View>
+
+                    {/* <Image source={{ uri: 'https://i.pinimg.com/736x/12/c6/99/12c6996bb98d720960d0cc34570e0ba7.jpg' }} style={styles.productImage} resizeMode="cover" /> */}
 
                     <TouchableOpacity
                         style={[styles.iconButton, styles.topLeftIcon]}
@@ -50,14 +81,14 @@ const Details = ({ route, navigation }: DetailProps) => {
                 <View style={styles.detailsCard}>
                     <View style={styles.headerRow}>
                         <View>
-                            <Text style={styles.productName}>{data.data.title || 'Product Name'}</Text>
-                            <Text style={styles.productCategory}>{data.data.category || 'Dagadia jacket'}</Text>
+                            <Text style={styles.productName}>{product_data.title || 'Product Name'}</Text>
+                            <Text style={styles.productCategory}>{product_data.category || 'Dagadia jacket'}</Text>
                         </View>
-                        <Text style={styles.productPrice}>${data.data.price ? data.data.price.toFixed(2) : 'N/A'}</Text>
+                        <Text style={styles.productPrice}>${product_data.price ? product_data.price.toFixed(2) : 'N/A'}</Text>
                     </View>
 
                     <Text style={styles.descriptionText}>
-                        {data.data.description}
+                        {product_data.description}
                     </Text>
                 </View>
             </ScrollView>
@@ -104,6 +135,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 10,
         elevation: 8,
+        marginTop: 10,
     },
     imageScrollView: {
         flex: 1,
@@ -129,6 +161,23 @@ const styles = StyleSheet.create({
     },
     topLeftIcon: {
         left: 20,
+    },
+    dotContainer: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginBottom: 10,
+    },
+    dot: {
+        height: 6,
+        width: 6,
+        borderRadius: 4,
+        backgroundColor: AppTheme.primary_2,
+        marginHorizontal: 4,
+    },
+    activeDot: {
+        backgroundColor: AppTheme.secondary,
+        width: 8,
+        height: 8,
     },
     detailsCard: {
         width: width,
@@ -188,6 +237,30 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginRight: 15
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: AppTheme.primary,
+        padding: 20,
+    },
+    errorText: {
+        fontSize: 18,
+        color: AppTheme.secondary,
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    goBackButton: {
+        backgroundColor: AppTheme.primary,
+        paddingVertical: 12,
+        paddingHorizontal: 25,
+        borderRadius: 10,
+    },
+    goBackButtonText: {
+        color: AppTheme.secondary,
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });
 

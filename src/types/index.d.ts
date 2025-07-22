@@ -1,4 +1,4 @@
-import { Datum } from "../models/products/productsModel";
+import { Product } from "../models/products/productsModel";
 
 // type
 export type RootStackParamList = {
@@ -7,7 +7,7 @@ export type RootStackParamList = {
   Login: undefined
   Signup: undefined;
   ForgotPassword: undefined;
-  Details: {data: Datum};
+  Details: {data: Product};
   AddToCart: undefined;
   Favourites: undefined;
   Profile: undefined;

@@ -38,7 +38,6 @@ export default function AppBar({ onCartPress, onProfilePress }: AppBarProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: AppTheme.primary,
   },
   appBar: {

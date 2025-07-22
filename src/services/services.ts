@@ -86,7 +86,7 @@ export const fetchUserApi = async (): Promise<string> => {
 };
 
 export const getProductsApi = async (): Promise<string> => {
-    const url = AppUrls.appUrl + AppUrls.productsUrl + '?page=1&limit=15&inc=all&query=all';
+    const url = 'https://dummyjson.com/products/';
 
     const options = {
         method: 'GET',

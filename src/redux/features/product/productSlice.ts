@@ -4,7 +4,7 @@ import { fetchProducts } from "./productTrunk";
 import { Constants } from "../../../utils/constants";
 
 const initialState: ProductsState = {
-    data: null,
+    productsData: null,
     apiError: null,
     isLoading: false,
     success: false,
@@ -24,7 +24,7 @@ export const productSlice = createSlice({
                 state.apiError = null;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                state.data = action.payload.data;
+                state.productsData = action.payload.products;
                 state.isLoading = false;
                 state.success = true;
                 state.apiError = null;

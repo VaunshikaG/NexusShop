@@ -1,31 +1,72 @@
 export interface ProductResponseData {
-    statusCode: number;
-    data: ProductData;
-    message: string;
-    success: boolean;
-}
-
-export interface ProductData {
-    page: number;
+    products: Product[];
+    total: number;
+    skip: number;
     limit: number;
-    totalPages: number;
-    previousPage: boolean;
-    nextPage: boolean;
-    totalItems: number;
-    currentPageItems: number;
-    data: Datum[];
 }
 
-export interface Datum {
+export interface Product {
     id: number;
     title: string;
     description: string;
+    category: Category;
     price: number;
     discountPercentage: number;
     rating: number;
     stock: number;
-    brand: string;
-    category: string;
-    thumbnail: string;
+    tags: string[];
+    brand?: string;
+    sku: string;
+    weight: number;
+    dimensions: Dimensions;
+    warrantyInformation: string;
+    shippingInformation: string;
+    availabilityStatus: AvailabilityStatus;
+    reviews: Review[];
+    returnPolicy: ReturnPolicy;
+    minimumOrderQuantity: number;
+    meta: Meta;
     images: string[];
+    thumbnail: string;
+}
+
+export enum AvailabilityStatus {
+    InStock = "In Stock",
+    LowStock = "Low Stock",
+}
+
+export enum Category {
+    Beauty = "beauty",
+    Fragrances = "fragrances",
+    Furniture = "furniture",
+    Groceries = "groceries",
+}
+
+export interface Dimensions {
+    width: number;
+    height: number;
+    depth: number;
+}
+
+export interface Meta {
+    createdAt: Date;
+    updatedAt: Date;
+    barcode: string;
+    qrCode: string;
+}
+
+export enum ReturnPolicy {
+    NoReturnPolicy = "No return policy",
+    The30DaysReturnPolicy = "30 days return policy",
+    The60DaysReturnPolicy = "60 days return policy",
+    The7DaysReturnPolicy = "7 days return policy",
+    The90DaysReturnPolicy = "90 days return policy",
+}
+
+export interface Review {
+    rating: number;
+    comment: string;
+    date: Date;
+    reviewerName: string;
+    reviewerEmail: string;
 }

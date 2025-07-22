@@ -7,8 +7,8 @@ NexusShop is a modern mobile **shopping application** built with [React Native](
 
 ## 📱 Screenshots
 
-| Splash                  | Login                  | Signup                 | Home Screen            | Product Details         |------------------------|-------------------------|
-|-------------------------|------------------------|------------------------|
+| Splash                  | Login                  | Signup                 | Home Screen            | Product Details         |
+|-------------------------|------------------------|------------------------|------------------------|-------------------------|
 | ![](./screenshots/splash.png) | ![](./screenshots/login.png) | ![](./screenshots/signup.png) | ![](./screenshots/home2.png) | ![](./screenshots/details.png) |
 
 

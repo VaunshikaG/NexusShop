@@ -4,13 +4,17 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { AppTheme } from '../utils/colors';
 import Icon from '@react-native-vector-icons/fontawesome6';
+import { products } from '../types/data';
+import IconBtn from '../component/IconBtn';
 
 const { width } = Dimensions.get('window');
 
 type DetailProps = NativeStackScreenProps<RootStackParamList, 'Details'>
 
 const Details = ({ route, navigation }: DetailProps) => {
-    const product_data = route.params.data;
+    // const product_data = route.params.data;
+    const product_data = products;
+
     const [activeIndex, setActiveIndex] = useState(0);
     const productImages = (product_data.images && product_data.images.length > 0)
         ? product_data.images
@@ -36,6 +40,7 @@ const Details = ({ route, navigation }: DetailProps) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar barStyle={'light-content'} />
 
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles.imageContainer}>
@@ -44,8 +49,9 @@ const Details = ({ route, navigation }: DetailProps) => {
                         pagingEnabled
                         showsHorizontalScrollIndicator={true}
                         style={styles.imageScrollView}
+                        onScroll={onScroll}
                     >
-                        {product_data.images.map((imgUri, index) => (
+                        {productImages.map((imgUri, index) => (
                             <Image
                                 key={index}
                                 source={{ uri: imgUri }}
@@ -57,7 +63,7 @@ const Details = ({ route, navigation }: DetailProps) => {
 
                     {/* Dot indicators */}
                     <View style={styles.dotContainer}>
-                        {product_data.images.map((_, index) => (
+                        {productImages.map((_, index) => (
                             <View
                                 key={index}
                                 style={[
@@ -70,12 +76,12 @@ const Details = ({ route, navigation }: DetailProps) => {
 
                     {/* <Image source={{ uri: 'https://i.pinimg.com/736x/12/c6/99/12c6996bb98d720960d0cc34570e0ba7.jpg' }} style={styles.productImage} resizeMode="cover" /> */}
 
-                    <TouchableOpacity
-                        style={[styles.iconButton, styles.topLeftIcon]}
+                    <IconBtn
+                        iconName="arrow-left"
+                        optionKey="arrow-left"
                         onPress={() => navigation.goBack()}
-                    >
-                        <Icon name="arrow-left" size={20} color={AppTheme.secondary} iconStyle='solid' />
-                    </TouchableOpacity>
+                        iconStyle={[styles.iconButton, styles.topLeftIcon]}
+                    />
                 </View>
 
                 <View style={styles.detailsCard}>
@@ -141,13 +147,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     productImage: {
-        width: '100%',
+        width: width,
         height: '100%',
     },
     iconButton: {
         position: 'absolute',
         top: 50,
-        backgroundColor: AppTheme.white,
+        backgroundColor: AppTheme.beige,
         borderRadius: 20,
         width: 40,
         height: 40,

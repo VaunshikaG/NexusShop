@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, StatusBar } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/index';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,49 +8,60 @@ import { loadUserFromStorage, clearStorage, loginUser } from '../redux/features/
 import { logout } from '../redux/features/auth/authSlice';
 import Snackbar from 'react-native-snackbar';
 import { Constants } from '../utils/constants';
+import { AppTheme } from '../utils/colors';
 
 type SplashScreenProps = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
+// const SplashScreen = () => {
 const SplashScreen = ({ navigation }: SplashScreenProps) => {
-    const dispatch: AppDispatch = useDispatch()
-    const { isAuthenticated } = useSelector((state: RootState) => state.authentication);
+        const dispatch: AppDispatch = useDispatch()
+        const { isAuthenticated } = useSelector((state: RootState) => state.authentication);
 
-    useEffect(() => {
-        loadData()
-    }, [dispatch]);
+        useEffect(() => {
+            loadData()
+        }, [dispatch]);
 
-    const loadData = async () => {
-        const result = await dispatch(loadUserFromStorage())
+        const loadData = async () => {
+            const result = await dispatch(loadUserFromStorage())
 
-        if (loadUserFromStorage.rejected.match(result)) {
-            console.log('loadData reject: ', result);
+            if (loadUserFromStorage.rejected.match(result)) {
+                console.log('loadData reject: ', result);
 
-            const errorMessage = result.error as string;
-            Snackbar.show({
-                text: errorMessage || Constants.tokenExpiry,
-                duration: Snackbar.LENGTH_SHORT,
-            });
-            dispatch(logout())
-            dispatch(clearStorage())
+                const errorMessage = result.error as string;
+                Snackbar.show({
+                    text: errorMessage || Constants.tokenExpiry,
+                    duration: Snackbar.LENGTH_SHORT,
+                });
+                dispatch(logout())
+                dispatch(clearStorage())
 
-        } else {
-            console.log('loadData done: ', result);
-            const timer = setTimeout(() => {
-                if (isAuthenticated) {
-                    navigation.replace('Signup');
-                } else {
-                    navigation.replace('Home')
-                }
-            }, 2000);
+            } else {
+                console.log('loadData done: ', result);
+                const timer = setTimeout(() => {
+                    if (isAuthenticated) {
+                        navigation.replace('Signup');
+                    } else {
+                        navigation.replace('Home')
+                    }
+                }, 2000);
 
-            return () => clearTimeout(timer);
+                return () => clearTimeout(timer);
+            }
         }
-    }
+
+    // useEffect(() => {
+    //     const timer = setTimeout(() => {
+    //         navigation.replace('Home')
+    //     }, 2000);
+
+    //     return () => clearTimeout(timer);
+    // }, [])
 
     return (
         <View style={styles.container}>
+            <StatusBar barStyle={'light-content'} />
             <Image
-                source={require('../../assets/imgs/logo_transparent.gif')}
+                source={require('../../assets/imgs/logo_transparent1.gif')}
                 style={styles.gif}
                 resizeMode="contain"
             />
@@ -69,11 +80,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: AppTheme.primary_3
     },
     gif: {
-        width: 450,
-        height: 450
+        width: 350,
+        height: 350
     },
     video: {
         position: 'absolute',

@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { AppTheme } from '../utils/colors'
 import Icon from '@react-native-vector-icons/fontawesome6'
@@ -27,6 +27,7 @@ const Home = ({ navigation }: HomeProps) => {
 
     return (
         <View style={styles.container}>
+            <StatusBar barStyle={'light-content'} />
             <AppBar
                 onCartPress={() => navigation.navigate('AddToCart')}
                 onProfilePress={() => navigation.navigate('Profile')}

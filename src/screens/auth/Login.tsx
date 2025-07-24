@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, Pressable } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, Pressable, StatusBar } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearError } from '../../redux/features/auth/authSlice';
 import { AppDispatch, RootState } from '../../redux/store';
@@ -108,6 +108,7 @@ const Login = ({ navigation }: LoginProps) => {
             style={styles.container}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         >
+            <StatusBar barStyle={'light-content'} />
             <View style={styles.formContainer}>
                 <Text style={styles.appName}>{Constants.appName}</Text>
 

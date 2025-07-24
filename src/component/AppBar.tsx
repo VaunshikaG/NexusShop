@@ -28,7 +28,7 @@ export default function AppBar({ onCartPress, onProfilePress }: AppBarProps) {
             style={styles.iconContainer}
             onPress={onProfilePress}
           >
-            <MaterialIcons name='cart' size={20} color={AppTheme.beige} style={styles.appBarIcon} />
+            <Icon name='user' size={20} color={AppTheme.beige} style={styles.appBarIcon} iconStyle='solid'/>
           </TouchableOpacity>
         </View>
       </View>
@@ -66,6 +66,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   appBarIcon: {
-    marginLeft: 10,
+    marginLeft: 20,
   }
 })

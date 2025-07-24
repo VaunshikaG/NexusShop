@@ -1,5 +1,6 @@
-import { Product } from "../models/products/productsModel";
-// import products from "../types/data"
+// import { Product } from "../models/products/productsModel";
+// import product1 from "../types/data"
+import Product from "./productsData"
 
 // type
 export type RootStackParamList = {

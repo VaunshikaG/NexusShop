@@ -4,8 +4,9 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { AppTheme } from '../utils/colors';
 import Icon from '@react-native-vector-icons/fontawesome6';
-import { products } from '../types/data';
+// import { products } from '../types/data';
 import IconBtn from '../component/IconBtn';
+import { PRODUCT_DATA } from '../types/productsData';
 
 const { width } = Dimensions.get('window');
 
@@ -13,12 +14,19 @@ type DetailProps = NativeStackScreenProps<RootStackParamList, 'Details'>
 
 const Details = ({ route, navigation }: DetailProps) => {
     // const product_data = route.params.data;
-    const product_data = products;
+    const { data: product_data } = route.params;
 
     const [activeIndex, setActiveIndex] = useState(0);
-    const productImages = (product_data.images && product_data.images.length > 0)
+    const productImages: string[] = (product_data?.images && product_data.images.length > 0)
         ? product_data.images
         : [product_data.thumbnail];
+
+    const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+        const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
+        if (slide !== activeIndex) {
+            setActiveIndex(slide);
+        }
+    };
 
     if (!product_data) {
         return (
@@ -31,15 +39,8 @@ const Details = ({ route, navigation }: DetailProps) => {
         );
     }
 
-    const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const slide = Math.ceil(event.nativeEvent.contentOffset.x / event.nativeEvent.layoutMeasurement.width);
-        if (slide !== activeIndex) {
-            setActiveIndex(slide);
-        }
-    };
-
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <StatusBar barStyle={'light-content'} />
 
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -80,6 +81,7 @@ const Details = ({ route, navigation }: DetailProps) => {
                         iconName="arrow-left"
                         optionKey="arrow-left"
                         onPress={() => navigation.goBack()}
+                        iconColor={AppTheme.beige}
                         iconStyle={[styles.iconButton, styles.topLeftIcon]}
                     />
                 </View>
@@ -103,7 +105,7 @@ const Details = ({ route, navigation }: DetailProps) => {
                 <Text style={styles.buyNowButtonText}>Buy Now</Text>
                 <Icon name="cart-shopping" size={24} color={AppTheme.beige} iconStyle='solid' />
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     );
 };
 
@@ -130,11 +132,12 @@ const styles = StyleSheet.create({
     imageContainer: {
         width: '100%',
         height: width * 1.2,
-        backgroundColor: AppTheme.primary,
+        backgroundColor: AppTheme.primary_3,
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomLeftRadius: 30,
-        borderBottomRightRadius: 30,
+        borderRadius: 30,
+        // borderBottomLeftRadius: 30,
+        // borderBottomRightRadius: 30,
         overflow: 'hidden',
         shadowColor: AppTheme.beige,
         shadowOffset: { width: 0, height: 5 },
@@ -152,8 +155,8 @@ const styles = StyleSheet.create({
     },
     iconButton: {
         position: 'absolute',
-        top: 50,
-        backgroundColor: AppTheme.beige,
+        top: 20,
+        backgroundColor: AppTheme.secondary,
         borderRadius: 20,
         width: 40,
         height: 40,

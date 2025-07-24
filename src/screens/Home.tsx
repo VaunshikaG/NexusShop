@@ -8,22 +8,26 @@ import { AppDispatch, RootState } from '../redux/store'
 import { fetchProducts } from '../redux/features/product/productTrunk'
 import { RootStackParamList } from '../types'
 import AppBar from '../component/AppBar'
+import { PRODUCT_DATA } from '../types/productsData'
+import CategoryBtn from '../component/CategoryBtn'
+import { CATEGORIES } from '../types/categories'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home = ({ navigation }: HomeProps) => {
-    const { productsData, isLoading, apiError, success } = useSelector((state: RootState) => state.products);
-    const dispatch: AppDispatch = useDispatch()
+    // const { productsData, isLoading, apiError, success } = useSelector((state: RootState) => state.products);
+    // const dispatch: AppDispatch = useDispatch()
 
+    // useEffect(() => {
+    //     dispatch(fetchProducts())
+    //     if (isLoading && success) {
+    //         console.log('home: ', isLoading, success);
+    //         console.log(productsData);
+    //     }
+    // }, [])
 
-    useEffect(() => {
-        dispatch(fetchProducts())
-        if (isLoading && success) {
-            console.log('home: ', isLoading, success);
-            console.log(productsData);
-        }
-    }, [])
-
+    const productsData = PRODUCT_DATA.products;
+    const categories = CATEGORIES;
 
     return (
         <View style={styles.container}>
@@ -32,31 +36,44 @@ const Home = ({ navigation }: HomeProps) => {
                 onCartPress={() => navigation.navigate('AddToCart')}
                 onProfilePress={() => navigation.navigate('Profile')}
             />
-            <View style={styles.space} />
-
-            
             <ScrollView style={styles.scrollViewFlex} contentContainerStyle={styles.productsGridContainer}>
+                <ScrollView
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={styles.categoryContainer}
+                    style={{ marginVertical: 10 }}
+                >
+                    {categories.map((item) => (
+                        <CategoryBtn
+                            key={item}
+                            btnName={item}
+                            onPress={() => console.log(item)}
+                        />
+                    ))}
+                </ScrollView>
+
+
                 <View style={styles.productsGrid}>
-                    {productsData?.map((product) => (
+                    {productsData?.map((item) => (
                         <TouchableOpacity
-                            key={product.id}
+                            key={item.id}
                             style={styles.productCard}
-                            onPress={() => navigation.navigate('Details', { data: product })}
+                            onPress={() => navigation.navigate('Details', { data: item })}
                         >
                             <Image
-                                source={{ uri: product.thumbnail }}
+                                source={{ uri: item.thumbnail }}
                                 style={styles.productImage}
                                 resizeMode='contain'
                             />
                             <View style={styles.productInfo}>
-                                <Text style={styles.productBrand}>{product.brand}</Text>
-                                <Text style={styles.productName}>{product.title}</Text>
-                                <Text style={styles.productPrice}>₹{product.price}</Text>
-                                <Text style={styles.productDiscount}>{product.discountPercentage}% off</Text>
+                                <Text style={styles.productBrand}>{item.brand}</Text>
+                                <Text style={styles.productName}>{item.title}</Text>
+                                <Text style={styles.productPrice}>₹{item.price}</Text>
+                                <Text style={styles.productDiscount}>{item.discountPercentage}% off</Text>
 
                                 <View style={styles.ratingContainer}>
                                     <Icon name='star-half-stroke' color={AppTheme.secondary_2}></Icon>
-                                    <Text style={styles.productRating}> {product.rating}</Text>
+                                    <Text style={styles.productRating}> {item.rating}</Text>
                                 </View>
                                 <TouchableOpacity style={styles.addButton}>
                                     <Text style={styles.addButtonText}>+</Text>
@@ -74,11 +91,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: AppTheme.primary,
-        // justifyContent: 'center',
-        // alignItems: 'center'
-    },
-    space: {
-        height: 20
     },
     scrollViewFlex: {
         flex: 1,
@@ -88,6 +100,13 @@ const styles = StyleSheet.create({
         width: '100%',
         paddingHorizontal: 5,
         paddingBottom: 20,
+    },
+    categoryContainer: {
+        flexDirection: 'row',
+        gap: 10,
+        paddingHorizontal: 10,
+        alignItems: 'center',
+        marginBottom: 10
     },
     productsGrid: {
         flexDirection: 'row',

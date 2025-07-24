@@ -8,9 +8,10 @@ interface IconBtnProps {
     iconName: string;
     onPress?: (key: string) => void;
     iconStyle?: StyleProp<ViewStyle>;
+    iconColor?: string;
 }
 
-const IconBtn = ({ optionKey, iconName, onPress , iconStyle}: IconBtnProps) => {
+const IconBtn = ({ optionKey, iconName, onPress , iconStyle, iconColor}: IconBtnProps) => {
     return (
         <TouchableOpacity
             style={[styles.optionIcon, iconStyle]}
@@ -18,9 +19,9 @@ const IconBtn = ({ optionKey, iconName, onPress , iconStyle}: IconBtnProps) => {
         >
             <Icon
                 name={iconName as any}
-                size={20}
+                size={18}
                 iconStyle="solid"
-                color={AppTheme.secondary}
+                color={iconColor ?? AppTheme.secondary} 
             />
         </TouchableOpacity>
     );

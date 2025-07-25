@@ -1,6 +1,6 @@
-// import { Product } from "../models/products/productsModel";
+import { Product } from "../models/products/productsModel";
+import { CartProduct } from "../models/products/cartModel";
 // import product1 from "../types/data"
-import Product from "./productsData"
 
 // type
 export type RootStackParamList = {
@@ -9,8 +9,8 @@ export type RootStackParamList = {
   Login: undefined
   Signup: undefined;
   ForgotPassword: undefined;
-  Details: {data: Product};
-  AddToCart: undefined;
+  Details: { data: Product };
+  AddToCart: { data: CartProduct[] } | undefined; 
   Favourites: undefined;
   Profile: undefined;
 }

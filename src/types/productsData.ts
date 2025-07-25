@@ -1,44 +1,6 @@
-export type Product = {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-  discountPercentage: number;
-  rating: number;
-  stock: number;
-  tags: string[];
-  brand: string;
-  sku: string;
-  weight: number;
-  dimensions: {
-    width: number;
-    height: number;
-    depth: number;
-  };
-  warrantyInformation: string;
-  shippingInformation: string;
-  availabilityStatus: string;
-  reviews: Array<{
-    rating: number;
-    comment: string;
-    date: string;
-    reviewerName: string;
-    reviewerEmail: string;
-  }>;
-  returnPolicy: string;
-  minimumOrderQuantity: number;
-  meta: {
-    createdAt: string;
-    updatedAt: string;
-    barcode: string;
-    qrCode: string;
-  };
-  images: string[];
-  thumbnail: string;
-};
+import { ProductResponseData } from "../models/products/productsModel";
 
-export const PRODUCT_DATA = {
+export const PRODUCT_DATA: ProductResponseData = {
     products: [
         {
             id: 1,
@@ -1837,70 +1799,7 @@ export const PRODUCT_DATA = {
             thumbnail: "https://cdn.dummyjson.com/product-images/groceries/kiwi/thumbnail.webp"
         }
     ],
-    "total": 194,
-    "skip": 0,
-    "limit": 30
-}
-
-export const products1 = {
-    id: 10,
-    title: "Gucci Bloom Eau de",
-    description: "Gucci Bloom by Gucci is a floral and captivating fragrance, with notes of tuberose, jasmine, and Rangoon creeper. It's a modern and romantic scent.",
-    category: "fragrances",
-    price: 79.99,
-    discountPercentage: 14.39,
-    rating: 2.74,
-    stock: 91,
-    tags: [
-        "fragrances",
-        "perfumes"
-    ],
-    brand: "Gucci",
-    sku: "FRA-GUC-GUC-010",
-    "weight": 7,
-    dimensions: {
-        width: 20.92,
-        height: 21.68,
-        depth: 11.2
-    },
-    warrantyInformation: "6 months warranty",
-    shippingInformation: "Ships overnight",
-    availabilityStatus: "In Stock",
-    reviews: [
-        {
-            rating: 1,
-            comment: "Very dissatisfied!",
-            date: "2025-04-30T09:41:02.053Z",
-            reviewerName: "Cameron Perez",
-            reviewerEmail: "cameron.perez@x.dummyjson.com"
-        },
-        {
-            rating: 5,
-            comment: "Very happy with my purchase!",
-            date: "2025-04-30T09:41:02.053Z",
-            reviewerName: "Daniel Cook",
-            reviewerEmail: "daniel.cook@x.dummyjson.com"
-        },
-        {
-            rating: 4,
-            comment: "Highly impressed!",
-            date: "2025-04-30T09:41:02.053Z",
-            reviewerName: "Addison Wright",
-            reviewerEmail: "addison.wright@x.dummyjson.com"
-        }
-    ],
-    returnPolicy: "No return policy",
-    minimumOrderQuantity: 2,
-    meta: {
-        createdAt: "2025-04-30T09:41:02.053Z",
-        updatedAt: "2025-04-30T09:41:02.053Z",
-        barcode: "3170832177880",
-        qrCode: "https://cdn.dummyjson.com/public/qr-code.png"
-    },
-    images: [
-        "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/1.webp",
-        "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/2.webp",
-        "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/3.webp"
-    ],
-    thumbnail: "https://cdn.dummyjson.com/product-images/fragrances/gucci-bloom-eau-de/thumbnail.webp"
+    total: 194,
+    skip: 0,
+    limit: 30
 }

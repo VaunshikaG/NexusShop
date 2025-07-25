@@ -3,23 +3,36 @@ import React from 'react'
 import { AppTheme } from '../utils/colors';
 
 interface CategoryBtnProps {
-    key: string;
+    key: number;
     btnName: string;
-    onPress?: (key: string) => void;
+    isActive: boolean;
+    onPress?: () => void;
 }
 
-const CategoryBtn = ({ key, btnName, onPress }: CategoryBtnProps) => {
+const CategoryBtn = ({ isActive, btnName, onPress }: CategoryBtnProps) => {
     return (
         <TouchableOpacity
-            style={styles.optionIcon}
-            onPress={() => onPress?.(key)}
+            style={[
+                styles.optionIcon, 
+                isActive ? styles.activeButton : null
+            ]}
+            onPress={onPress}
         >
-            <Text style={styles.btnText}>{btnName.charAt(0).toUpperCase() + btnName.slice(1)}</Text>
+            <Text style={[
+                styles.btnText,
+                isActive ? styles.activeButton : null
+            ]}>
+                {btnName.charAt(0).toUpperCase() + btnName.slice(1)}
+            </Text>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
+    activeButton: {
+        backgroundColor: AppTheme.primary_3 ,
+        color: AppTheme.secondary, 
+    },
     optionIcon: {
         backgroundColor: AppTheme.secondary,
         borderRadius: 10,
@@ -38,7 +51,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: AppTheme.beige,
         paddingHorizontal: 8,
-        paddingVertical:1,
+        paddingVertical: 1,
     },
 });
 

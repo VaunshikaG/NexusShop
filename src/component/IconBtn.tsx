@@ -4,18 +4,18 @@ import { TouchableOpacity, View, Text, StyleSheet, StyleProp, ViewStyle } from '
 import { AppTheme } from '../utils/colors';
 
 interface IconBtnProps {
-    optionKey: string;
+    key: number;
     iconName: string;
-    onPress?: (key: string) => void;
+    onPress?: () => void;
     iconStyle?: StyleProp<ViewStyle>;
     iconColor?: string;
 }
 
-const IconBtn = ({ optionKey, iconName, onPress , iconStyle, iconColor}: IconBtnProps) => {
+const IconBtn = ({ iconName, onPress , iconStyle, iconColor}: IconBtnProps) => {
     return (
         <TouchableOpacity
             style={[styles.optionIcon, iconStyle]}
-            onPress={() => onPress?.(optionKey)}
+            onPress={onPress}
         >
             <Icon
                 name={iconName as any}

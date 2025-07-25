@@ -27,7 +27,7 @@ const App = () => {
     //     <AppNavigator />
     //   </NavigationContainer>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Home'>
+        <Stack.Navigator initialRouteName='Splash'>
           {/* <StatusBar barStyle={'light-content'} /> */}
           <Stack.Screen
             name="Splash"

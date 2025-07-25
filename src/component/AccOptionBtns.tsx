@@ -4,17 +4,17 @@ import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { AppTheme } from '../utils/colors';
 
 interface AccOptionBtnsProps {
-  optionKey: string;
+  key: number;
   title: string;
   iconName: string;
-  onPress?: (key: string) => void;
+  onPress?: () => void;
 }
 
-const AccOptionBtns = ({ optionKey, title, iconName, onPress }: AccOptionBtnsProps) => {
+const AccOptionBtns = ({ title, iconName, onPress }: AccOptionBtnsProps) => {
     return (
         <TouchableOpacity
             style={styles.optionButton}
-            onPress={() => onPress?.(optionKey)}
+            onPress={onPress}
         >
             <View style={styles.optionIcon}>
                 <Icon

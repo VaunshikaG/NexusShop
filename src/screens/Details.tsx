@@ -4,17 +4,16 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import { AppTheme } from '../utils/colors';
 import Icon from '@react-native-vector-icons/fontawesome6';
-// import { products } from '../types/data';
 import IconBtn from '../component/IconBtn';
-import { PRODUCT_DATA } from '../types/productsData';
+import { CartProduct } from '../models/products/cartModel';
+import { Product } from '../models/products/productsModel';
 
 const { width } = Dimensions.get('window');
 
 type DetailProps = NativeStackScreenProps<RootStackParamList, 'Details'>
 
 const Details = ({ route, navigation }: DetailProps) => {
-    // const product_data = route.params.data;
-    const { data: product_data } = route.params;
+    const product_data: Product = route.params.data;
 
     const [activeIndex, setActiveIndex] = useState(0);
     const productImages: string[] = (product_data?.images && product_data.images.length > 0)
@@ -38,6 +37,20 @@ const Details = ({ route, navigation }: DetailProps) => {
             </View>
         );
     }
+
+    const addToCart = () => {
+        const cartData: CartProduct[] = [{
+            id: product_data.id,
+            title: product_data.title,
+            price: product_data.price,
+            total: product_data.price,
+            quantity: 1,
+            discountPercentage: product_data.discountPercentage,
+            discountedTotal: product_data.price,
+            thumbnail: product_data.thumbnail,
+        }]
+        navigation.navigate('AddToCart', { data: cartData });
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -79,7 +92,7 @@ const Details = ({ route, navigation }: DetailProps) => {
 
                     <IconBtn
                         iconName="arrow-left"
-                        optionKey="arrow-left"
+                        key={11}
                         onPress={() => navigation.goBack()}
                         iconColor={AppTheme.beige}
                         iconStyle={[styles.iconButton, styles.topLeftIcon]}
@@ -101,7 +114,7 @@ const Details = ({ route, navigation }: DetailProps) => {
                 </View>
             </ScrollView>
 
-            <TouchableOpacity style={styles.buyNowButton}>
+            <TouchableOpacity style={styles.buyNowButton} onPress={addToCart} >
                 <Text style={styles.buyNowButtonText}>Buy Now</Text>
                 <Icon name="cart-shopping" size={24} color={AppTheme.beige} iconStyle='solid' />
             </TouchableOpacity>
@@ -230,7 +243,7 @@ const styles = StyleSheet.create({
         right: 0,
         flex: 1,
         backgroundColor: AppTheme.secondary,
-        paddingVertical: 10,
+        paddingVertical: 12,
         borderRadius: 15,
         alignItems: 'center',
         marginBottom: 20,
@@ -244,7 +257,7 @@ const styles = StyleSheet.create({
     buyNowButtonText: {
         color: AppTheme.white,
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: '600',
         marginRight: 15
     },
     errorContainer: {

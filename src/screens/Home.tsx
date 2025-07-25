@@ -8,9 +8,10 @@ import { AppDispatch, RootState } from '../redux/store'
 import { fetchProducts } from '../redux/features/product/productTrunk'
 import { RootStackParamList } from '../types'
 import AppBar from '../component/AppBar'
-import { PRODUCT_DATA } from '../types/productsData'
 import CategoryBtn from '../component/CategoryBtn'
 import { CATEGORIES } from '../types/categories'
+import Loading from '../component/Loading'
+import { PRODUCT_DATA } from '../types/productsData'
 
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
@@ -26,8 +27,26 @@ const Home = ({ navigation }: HomeProps) => {
     //     }
     // }, [])
 
+    const [isLoading, setIsLoading] = useState(true);
+
     const productsData = PRODUCT_DATA.products;
-    const categories = CATEGORIES;
+    const categories = [
+        { id: 0, name: 'All' },
+        ...CATEGORIES.map((category, index) => ({
+            id: index + 1,
+            name: category,
+        })),
+    ];
+
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const filteredData = productsData.filter((item) => selectedCategory === "All" || item.category === selectedCategory);
+
+    console.log(filteredData.length)
+    useEffect(() => {
+        if (filteredData)
+            setIsLoading(false);
+    }, []);
+
 
     return (
         <View style={styles.container}>
@@ -45,49 +64,64 @@ const Home = ({ navigation }: HomeProps) => {
                 >
                     {categories.map((item) => (
                         <CategoryBtn
-                            key={item}
-                            btnName={item}
-                            onPress={() => console.log(item)}
+                            key={item.id}
+                            btnName={item.name}
+                            onPress={() => setSelectedCategory(item.name)}
+                            isActive={selectedCategory === item.name}
                         />
                     ))}
                 </ScrollView>
 
+                {isLoading && <Loading />}
 
-                <View style={styles.productsGrid}>
-                    {productsData?.map((item) => (
-                        <TouchableOpacity
-                            key={item.id}
-                            style={styles.productCard}
-                            onPress={() => navigation.navigate('Details', { data: item })}
-                        >
-                            <Image
-                                source={{ uri: item.thumbnail }}
-                                style={styles.productImage}
-                                resizeMode='contain'
-                            />
-                            <View style={styles.productInfo}>
-                                <Text style={styles.productBrand}>{item.brand}</Text>
-                                <Text style={styles.productName}>{item.title}</Text>
-                                <Text style={styles.productPrice}>₹{item.price}</Text>
-                                <Text style={styles.productDiscount}>{item.discountPercentage}% off</Text>
+                {(filteredData.length === 0 && !isLoading) ?
+                    <Text style={styles.notFound}>
+                        <Text style={styles.notFoundText}>No Products Found</Text>
+                    </Text>
+                    : <View style={styles.productsGrid}>
+                        {filteredData?.map((item) => (
+                            <TouchableOpacity
+                                key={item.id}
+                                style={styles.productCard}
+                                onPress={() => navigation.navigate('Details', { data: item })}
+                            >
+                                <Image
+                                    source={{ uri: item.thumbnail }}
+                                    style={styles.productImage}
+                                    resizeMode='contain'
+                                />
+                                <View style={styles.productInfo}>
+                                    <Text style={styles.productBrand}>{item.brand}</Text>
+                                    <Text style={styles.productName}>{item.title}</Text>
+                                    <Text style={styles.productPrice}>₹{item.price}</Text>
+                                    <Text style={styles.productDiscount}>{item.discountPercentage}% off</Text>
 
-                                <View style={styles.ratingContainer}>
-                                    <Icon name='star-half-stroke' color={AppTheme.secondary_2}></Icon>
-                                    <Text style={styles.productRating}> {item.rating}</Text>
+                                    <View style={styles.ratingContainer}>
+                                        <Icon name='star-half-stroke' color={AppTheme.secondary_2}></Icon>
+                                        <Text style={styles.productRating}> {item.rating}</Text>
+                                    </View>
                                 </View>
-                                <TouchableOpacity style={styles.addButton}>
-                                    <Text style={styles.addButtonText}>+</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                }
             </ScrollView>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    notFound: {
+        marginTop: 50,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    notFoundText: {
+        color: AppTheme.beige,
+        textAlign: 'center',
+        fontSize: 18,
+    },
     container: {
         flex: 1,
         backgroundColor: AppTheme.primary,

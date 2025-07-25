@@ -19,18 +19,18 @@ const USER_DATA = {
 };
 
 interface ProfileOption {
-    key: string;
+    id: number;
     title: string;
     icon: string;
 }
 
 const PROFILE_OPTIONS: ProfileOption[] = [
-    { key: 'address', title: 'My Address', icon: 'location-dot' },
-    { key: 'account', title: 'Account', icon: 'user' },
-    { key: 'notifications', title: 'Notifications', icon: 'bell' },
-    { key: 'devices', title: 'Devices', icon: 'mobile-screen-button' },
-    { key: 'password', title: 'Passwords', icon: 'key' },
-    { key: 'language', title: 'Language', icon: 'globe' },
+    { id: 1, title: 'My Address', icon: 'location-dot' },
+    { id: 2, title: 'Account', icon: 'user' },
+    { id: 3, title: 'Notifications', icon: 'bell' },
+    { id: 4, title: 'Devices', icon: 'mobile-screen-button' },
+    { id: 5, title: 'Passwords', icon: 'key' },
+    { id: 6, title: 'Language', icon: 'globe' },
 ];
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, 'Profile'>
@@ -57,12 +57,13 @@ const Profile = ({ navigation }: ProfileProps) => {
             <View style={styles.header}>
                 <IconBtn
                     iconName='arrow-left'
-                    optionKey='arrow-left'
+                    key={10}
                     onPress={() => navigation.goBack()}
                 />
+                <Text style={styles.headerTitle}>Profile</Text>
                 <IconBtn
                     iconName='heart'
-                    optionKey='heart'
+                    key={20}
                     onPress={() => navigation.goBack()}
                 />
             </View>
@@ -77,10 +78,10 @@ const Profile = ({ navigation }: ProfileProps) => {
                 <View style={styles.optionsContainer}>
                     {PROFILE_OPTIONS.map((item) => (
                         <AccOptionBtns
-                            optionKey={item.key}
+                            key={item.id}
                             title={item.title}
                             iconName={item.icon}
-                            onPress={(key) => console.log('Pressed:', key)}
+                            onPress={() => console.log('Pressed:', item.id)}
                         />
                     ))}
                 </View>
@@ -122,7 +123,8 @@ const styles = StyleSheet.create({
     headerTitle: {
         fontSize: 22,
         fontWeight: 'bold',
-        color: '#333',
+        color: AppTheme.secondary_2,
+        textAlign: 'center'
     },
     headerIconButton: {
         backgroundColor: AppTheme.beige,

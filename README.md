@@ -22,6 +22,7 @@ NexusShop is a modern mobile **shopping application** built with [React Native](
       <img src="./screenshots/home.png" alt="Home Screen" width="200" />
     </td>
   </tr>
+  <br>
   <tr>
     <td align="center">
       <div>Product Details</div>

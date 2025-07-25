@@ -10,7 +10,7 @@ NexusShop is a modern mobile **shopping application** built with [React Native](
 <table>
   <tr>
     <td align="center">
-      <img src="./screenshots/splash.gif" alt="Splash" width="300" />
+      <img src="./screenshots/splash.gif" alt="Splash" width="100" />
       <br>Splash
     </td>
     <td align="center">
@@ -24,7 +24,7 @@ NexusShop is a modern mobile **shopping application** built with [React Native](
   </tr>
   <tr>
     <td align="center">
-      <img src="./screenshots/details.png" alt="Product Details" width="300" />
+      <img src="./screenshots/details.png" alt="Product Details" width="100" />
       <br>Product Details
     </td>
     <td align="center">

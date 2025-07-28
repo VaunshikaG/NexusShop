@@ -67,12 +67,12 @@ const Login = ({ navigation }: LoginProps) => {
         if (!validateForm()) return;
 
         try {
-              const user: LoginReqModel = {
-                  username: formData.username.trim().toLowerCase(),
-                  password: formData.password,
+            const user: LoginReqModel = {
+                username: formData.username.trim().toLowerCase(),
+                password: formData.password,
                 //   username: 'qwerty',
                 //   password: 'test123',
-              }
+            }
             const result = await dispatch(loginUser(user));
 
             if (loginUser.fulfilled.match(result)) {
@@ -82,8 +82,8 @@ const Login = ({ navigation }: LoginProps) => {
                 });
                 navigation.replace('Home');
             } else {
-                console.log('loginerror: ' , result);
-                
+                console.log('loginerror: ', result);
+
                 const errorMessage = result.payload as string;
                 Snackbar.show({
                     text: errorMessage || Constants.tryAgain,

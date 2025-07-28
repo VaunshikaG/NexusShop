@@ -21,52 +21,52 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const App = () => {
   return (
-    // <Provider store={store}>
-    //   <NavigationContainer>
-    //     <StatusBar barStyle={'light-content'} />
-    //     <AppNavigator />
-    //   </NavigationContainer>
+    <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName='Splash'>
-          {/* <StatusBar barStyle={'light-content'} /> */}
-          <Stack.Screen
-            name="Splash"
-            component={SplashScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Signup"
-            component={Signup}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login"
-            component={Login}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Profile"
-            component={Profile}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Details"
-            component={Details}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="AddToCart"
-            component={AddToCart}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
+        <AppNavigator />
       </NavigationContainer>
-    // </Provider>
+    </Provider>
+
+    //  <NavigationContainer>
+    //     <Stack.Navigator initialRouteName='Splash'>
+    //       <StatusBar barStyle={'light-content'} />
+    //       <Stack.Screen
+    //         name="Splash"
+    //         component={SplashScreen}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="Home"
+    //         component={Home}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="Signup"
+    //         component={Signup}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="Login"
+    //         component={Login}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="Profile"
+    //         component={Profile}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="Details"
+    //         component={Details}
+    //         options={{ headerShown: false }}
+    //       />
+    //       <Stack.Screen
+    //         name="AddToCart"
+    //         component={AddToCart}
+    //         options={{ headerShown: false }}
+    //       />
+    //     </Stack.Navigator>
+    //   </NavigationContainer>
   );
 }
 

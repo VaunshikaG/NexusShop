@@ -115,16 +115,16 @@ const Signup = ({ navigation }: SignupProps) => {
   };
 
   const handleSignup = async () => {
-    // if (!validateForm()) return;
+    if (!validateForm()) return;
 
     try {
       const user: SignupReqModel = {
-        // username: formData.name.trim().toLowerCase(),
-        // email: formData.email.trim(),
-        // password: formData.password,
-        username: 'qwerty',
-        email: 'qwerty@gmail.com',
-        password: 'test123'
+        username: formData.name.trim().toLowerCase(),
+        email: formData.email.trim(),
+        password: formData.password,
+        // username: 'qwerty11',
+        // email: 'qwerty11@gmail.com',
+        // password: 'test123'
       }
       const result = await dispatch(signupUser(user));
 
@@ -133,7 +133,7 @@ const Signup = ({ navigation }: SignupProps) => {
           text: Constants.signupSuccess,
           duration: Snackbar.LENGTH_SHORT,
         })
-        navigation.replace('Login');
+        navigateToLogin();
       } else {
         const errorMessage = result.payload as string;
         console.log('here: ', result);
@@ -152,7 +152,7 @@ const Signup = ({ navigation }: SignupProps) => {
   };
 
   const navigateToLogin = () => {
-    navigation.navigate('Login' as never);
+    navigation.replace('Login');
   };
 
   return (
@@ -171,7 +171,7 @@ const Signup = ({ navigation }: SignupProps) => {
           placeholder={Constants.userName}
           value={formData.name}
           onChangeText={(value) => handleInputChange('name', value)}
-          autoCapitalize="words"
+          autoCapitalize="none"
           autoCorrect={false}
         />
         {errors.name ? <Text style={styles.errorText}>{errors.name}</Text> : <View style={styles.space} />}
@@ -180,7 +180,7 @@ const Signup = ({ navigation }: SignupProps) => {
         <TextInput
           style={[styles.input, errors.email ? styles.errorText : null]}
           placeholderTextColor={AppTheme.primary}
-          placeholder={Constants.password}
+          placeholder={Constants.email}
           value={formData.email}
           onChangeText={(value) => handleInputChange('email', value)}
           keyboardType="email-address"
@@ -194,7 +194,7 @@ const Signup = ({ navigation }: SignupProps) => {
         <TextInput
           style={[styles.input, errors.password ? styles.errorText : null]}
           placeholderTextColor={AppTheme.primary}
-          placeholder={Constants.confirmPassword}
+          placeholder={Constants.password}
           value={formData.password}
           onChangeText={(value) => handleInputChange('password', value)}
           secureTextEntry={!showPassword}

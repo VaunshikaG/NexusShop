@@ -10,7 +10,7 @@ const initialState: ProductsState = {
     success: false,
 }
 
-export const productSlice = createSlice({
+const productSlice = createSlice({
     name: 'product',
     initialState,
     reducers: {
@@ -41,3 +41,4 @@ export const productSlice = createSlice({
 
 export const { clearProducts } = productSlice.actions;
 export default productSlice.reducer;
+export {productSlice};

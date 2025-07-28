@@ -16,20 +16,21 @@ import { PRODUCT_DATA } from '../types/productsData'
 type HomeProps = NativeStackScreenProps<RootStackParamList, 'Home'>
 
 const Home = ({ navigation }: HomeProps) => {
-    // const { productsData, isLoading, apiError, success } = useSelector((state: RootState) => state.products);
-    // const dispatch: AppDispatch = useDispatch()
+    const { isLoading, success } = useSelector((state: RootState) => state.products);
+    const dispatch: AppDispatch = useDispatch()
+    const productsData = useSelector((state: RootState) => state.products.productsData);
 
-    // useEffect(() => {
-    //     dispatch(fetchProducts())
-    //     if (isLoading && success) {
-    //         console.log('home: ', isLoading, success);
-    //         console.log(productsData);
-    //     }
-    // }, [])
+    useEffect(() => {
+        dispatch(fetchProducts())
+        if (isLoading && success) {
+            console.log('home: ', isLoading, success);
+            console.log(productsData);
+        }
+    }, [])
 
-    const [isLoading, setIsLoading] = useState(true);
-
-    const productsData = PRODUCT_DATA.products;
+    // const [isLoading, setIsLoading] = useState(true);
+    // const productsData = PRODUCT_DATA.products;
+    
     const categories = [
         { id: 0, name: 'All' },
         ...CATEGORIES.map((category, index) => ({
@@ -39,14 +40,12 @@ const Home = ({ navigation }: HomeProps) => {
     ];
 
     const [selectedCategory, setSelectedCategory] = useState('All');
-    const filteredData = productsData.filter((item) => selectedCategory === "All" || item.category === selectedCategory);
+    const filteredData = productsData?.filter((item) => selectedCategory === "All" || item.category === selectedCategory);
 
-    console.log(filteredData.length)
-    useEffect(() => {
-        if (filteredData)
-            setIsLoading(false);
-    }, []);
-
+    // useEffect(() => {
+    //     if (filteredData)
+    //         setIsLoading(false);
+    // }, []);
 
     return (
         <View style={styles.container}>
@@ -74,7 +73,7 @@ const Home = ({ navigation }: HomeProps) => {
 
                 {isLoading && <Loading />}
 
-                {(filteredData.length === 0 && !isLoading) ?
+                {(filteredData?.length === 0 && !isLoading) ?
                     <Text style={styles.notFound}>
                         <Text style={styles.notFoundText}>No Products Found</Text>
                     </Text>

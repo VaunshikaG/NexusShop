@@ -10,6 +10,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types';
 import AccOptionBtns from '../component/AccOptionBtns';
 import IconBtn from '../component/IconBtn';
+import { logout } from '../redux/features/auth/authSlice';
+import { clearStorage } from '../redux/features/auth/authTrunks';
 
 // Mock user data - In a real application, this would come from your Redux store or an API call.
 const USER_DATA = {
@@ -31,21 +33,21 @@ const PROFILE_OPTIONS: ProfileOption[] = [
     { id: 4, title: 'Devices', icon: 'mobile-screen-button' },
     { id: 5, title: 'Passwords', icon: 'key' },
     { id: 6, title: 'Language', icon: 'globe' },
+    { id: 7, title: 'Logout', icon: 'arrow-right-from-bracket' },
 ];
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, 'Profile'>
 
 const Profile = ({ navigation }: ProfileProps) => {
-    // const { data, isLoading, apiError, success } = useSelector((state: RootState) => state.userInfo);
-    // const dispatch: AppDispatch = useDispatch()
+    const { data, isLoading, success } = useSelector((state: RootState) => state.userInfo);
+    const dispatch: AppDispatch = useDispatch()
 
-
-    // useEffect(() => {
-    //     dispatch(fetchUserInfo())
-    //     if (isLoading && success) {
-    //         console.log('home: ', isLoading, success);
-    //     }
-    // }, [])
+    useEffect(() => {
+        dispatch(fetchUserInfo())
+        if (isLoading && success) {
+            console.log('home: ', isLoading, success);
+        }
+    }, [])
 
     const user = USER_DATA;
 
@@ -71,8 +73,8 @@ const Profile = ({ navigation }: ProfileProps) => {
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.profileHeader}>
                     <Image source={require("../../assets/imgs/no_profile.jpeg")} style={styles.avatar} />
-                    <Text style={styles.profileName}>{user.name}</Text>
-                    <Text style={styles.profileEmail}>{user.email}</Text>
+                    <Text style={styles.profileName}>{data?.username}</Text>
+                    <Text style={styles.profileEmail}>{data?.email}</Text>
                 </View>
 
                 <View style={styles.optionsContainer}>
@@ -81,7 +83,14 @@ const Profile = ({ navigation }: ProfileProps) => {
                             key={item.id}
                             title={item.title}
                             iconName={item.icon}
-                            onPress={() => console.log('Pressed:', item.id)}
+                            onPress={() => {
+                                if (item.title === "Logout") {
+                                    dispatch(logout());
+                                    dispatch(clearStorage());
+                                } else {
+                                    console.log('Pressed:', item.id)
+                                }
+                            }}
                         />
                     ))}
                 </View>

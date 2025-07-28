@@ -24,31 +24,37 @@ const AppNavigator = () => {
 
   useEffect(() => {
     const performInitialCheck = async () => {
-      const result = await dispatch(loadUserFromStorage())
+      try {
+        const result = await dispatch(loadUserFromStorage());
+        if (loadUserFromStorage.rejected.match(result)) {
+          console.log('loadData reject: ', result);
 
-      if (loadUserFromStorage.rejected.match(result)) {
-        console.log('loadData reject: ', result);
-
-        const errorMessage = result.error as string;
+          dispatch(logout());
+          dispatch(clearStorage());
+        } else {
+          console.log('loadData done: ', result);
+        }
+      } catch (error) {
+        console.error('Error during initial check:', error);
         Snackbar.show({
-          text: errorMessage || Constants.tokenExpiry,
-          duration: Snackbar.LENGTH_SHORT,
+          text: 'An unexpected error occurred during startup.',
+          duration: Snackbar.LENGTH_LONG,
         });
-        dispatch(logout())
-        dispatch(clearStorage())
-        setIsInitialCheckDone(false);
-
-      } else {
-        console.log('loadData done: ', result);
+      } finally {
         setIsInitialCheckDone(true);
       }
     };
 
     performInitialCheck();
-  }, []);
+  }, [dispatch]);
+  console.log('AppNavigator render:', { isAuthenticated, isLoading, isInitialCheckDone });
 
-  if (!isInitialCheckDone || isLoading) {
-    return <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />;
+  if (!isInitialCheckDone) {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Splash" component={SplashScreen} />
+      </Stack.Navigator>
+    );
   }
 
   return (
@@ -80,7 +86,7 @@ const AppNavigator = () => {
       ) : (
         // User is not logged in, show authentication screens
         <>
-          
+
           <Stack.Screen
             name="Signup"
             component={Signup}

@@ -1,4 +1,4 @@
-package com.nexusshop
+package com.redux.the_nexus_shop
 
 import android.app.Application
 import com.facebook.react.PackageList

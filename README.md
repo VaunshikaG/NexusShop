@@ -157,10 +157,6 @@ cd ios && pod install && cd ..
 npx react-native run-ios # or run-android
 ```
 
-## 📜 License
-
-[MIT](./LICENSE)
-
 ## 🙋‍♀️ Author
 
 Made by [Vaunshika Gogarkar](https://github.com/VaunshikaG)
